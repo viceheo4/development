@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- Copyright (C) 2007 The Android Open Source Project
-
+ * KJK_TALK APIDEMOS: AndroidManifest.xml
      Licensed under the Apache License, Version 2.0 (the "License");
      you may not use this file except in compliance with the License.
      You may obtain a copy of the License at
@@ -38,10 +38,13 @@
 
     <!-- We will request access to the camera, saying we require a camera
          of some sort but not one with autofocus capability. -->
+    <!-- KJK_DEBUG
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-feature android:name="android.hardware.camera" />
     <uses-feature android:name="android.hardware.camera.autofocus" android:required="false" />
+    -->
 
+    <!--KJK_TALK: activity를 담고있는 Application이름-->
     <application android:name="ApiDemosApplication"
             android:label="@string/activity_sample_code"
             android:icon="@drawable/app_sample_code" >
@@ -55,7 +58,7 @@
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.LAUNCHER" />
-                <!--KJK_TALK: DEFAULT, LAUNCHER�? ?��것이 default entry activity-->
+                <!--KJK_TALK: DEFAULT, LAUNCHER로 된것이 default entry activity-->
             </intent-filter>
         </activity>
 
@@ -88,6 +91,7 @@
             </intent-filter>
         </activity>
 
+        <!-- KJK_TALK: name설정, activity title bar에 출력될 제목 설정 activity에 적용될 theme설정 -->
         <activity android:name=".app.CustomDialogActivity"
                 android:label="@string/activity_custom_dialog"
                 android:theme="@style/Theme.CustomDialog">
@@ -116,7 +120,7 @@
 
         <activity android:name=".app.TranslucentActivity"
                 android:label="@string/activity_translucent"
-                android:theme="@style/Theme.Translucent">
+                android:theme="@style/Theme.Translucent"><!--KJK_TALK: 테마에 의해 반투명-->
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.SAMPLE_CODE" />
@@ -270,7 +274,7 @@
             </intent-filter>
         </activity>
 
-        <service android:name=".app.RemoteService" android:process=":remote">
+        <service android:name=".app.RemoteService" android:process=":remote"><!--KJK_TALK:로 호출하면 다른 process로 activity가 생성-->
             <intent-filter>
                 <!-- These are the interfaces supported by the service, which
                      you can bind to. -->
@@ -309,7 +313,7 @@
                 <category android:name="android.intent.category.SAMPLE_CODE" />
             </intent-filter>
         </activity>
-
+	<!-- KJK_TALK: ServiceStartArgumentsBinding-->
         <service android:name=".app.ForegroundService" />
 
         <activity android:name=".app.ForegroundService$Controller"
@@ -324,6 +328,7 @@
         <!-- Alarm Samples -->
 
         <receiver android:name=".app.OneShotAlarm" android:process=":remote" />
+        <!--KJK_TALK:로 호출하면 다른 process로 activity가 생성-->
 
         <receiver android:name=".app.RepeatingAlarm" android:process=":remote" />
 
@@ -362,21 +367,21 @@
 
         <!-- Notifications samples -->
 
-        <activity android:name=".app.NotifyWithText" android:label="App/Notification/NotifyWithText">
+        <activity android:name=".app.NotifyWithText" android:label="App/Ad.Notification/A02---NotifyWithText">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.SAMPLE_CODE" />
             </intent-filter>
         </activity>
 
-        <activity android:name=".app.IncomingMessage" android:label="App/Notification/IncomingMessage">
+        <activity android:name=".app.IncomingMessage" android:label="App/Ad.Notification/A01---IncomingMessage">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.SAMPLE_CODE" />
             </intent-filter>
         </activity>
-
-        <activity android:name=".app.IncomingMessageView" android:label="App/Notification/IncomingMessageView">
+        <!-- Category TAB이 EMBED임을 확인하길 바란다. -->
+        <activity android:name=".app.IncomingMessageView" android:label="App/Ad.Notification/A01---IncomingMessageView">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.EMBED" />
@@ -394,8 +399,9 @@
                 android:noHistory="true">
         </activity>
 
+        <!--KJK_TALK .app.StatusBarNotifications를 어떻게 띄울지 결정한다. -->
         <activity android:name=".app.StatusBarNotifications"
-                android:label="App/Notification/Status Bar"
+                android:label="App/Ad.Notification/B02---Status Bar"
                 android:launchMode="singleTop">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -405,7 +411,7 @@
 
         <service android:name=".app.NotifyingService" />
 
-        <activity android:name=".app.NotifyingController" android:label="App/Notification/Notifying Service Controller">
+        <activity android:name=".app.NotifyingController" android:label="App/Ad.Notification/B01---Notifying Service Controller">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.SAMPLE_CODE" />
@@ -436,6 +442,7 @@
 
             <!-- This metadata entry causes .app.SearchQueryResults to be the default context -->
             <!-- whenever the user invokes search while in this Activity. -->
+            <!-- KJK_TALK: search bar activity를 등록하는 부분. -->
             <meta-data android:name="android.app.default_searchable"
                        android:value=".app.SearchQueryResults" />
 
@@ -446,6 +453,7 @@
             <!-- For typical applications, it's simpler to define android.app.default_searchable -->
             <!-- just once, at the application level, where it serves as a default for all of -->
             <!-- the Activities in your package. -->
+            <!-- KJK_TALK: 특정 activity에서만 search bar를 달고 싶은경우 -->
         </activity>
 
         <!-- This activity represents the "search" activity in your application, in which -->
@@ -459,7 +467,7 @@
             </intent-filter>
 
             <!-- This intent-filter identifies this activity as "searchable" -->
-
+            <!-- KJK_TALK: SEARCH BAR임을 알리는 intent filter -->
             <intent-filter>
                 <action android:name="android.intent.action.SEARCH" />
                 <category android:name="android.intent.category.DEFAULT" />
@@ -467,7 +475,7 @@
 
             <!-- This metadata entry provides further configuration details for searches -->
             <!-- that are handled by this activity. -->
-
+            <!-- KJK_TALK: 실제 search bar UI를 구성하는 xml -->
             <meta-data android:name="android.app.searchable"
                        android:resource="@xml/searchable" />
         </activity>
