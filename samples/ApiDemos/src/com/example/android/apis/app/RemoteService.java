@@ -63,6 +63,7 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+//Stage Hunk Test
 // Need the following import to get access to the app resources, since this
 // class is in a sub-package.
 import com.example.android.apis.R;
@@ -142,9 +143,11 @@ public class RemoteService extends Service {
      */
     private final IRemoteService.Stub mBinder = new IRemoteService.Stub() {
         //cb는 IRemoteServiceCallback$Stub$Proxy로 client에게 msg를 보내는함수
-        public void registerCallback(IRemoteServiceCallback cb) {
+        public void registerCallback(_IRemoteServiceCallback cb) {
+            //RemoteCallbackList.register()호출하여 main thread구동시 cb가 
+            //호출될수 잇도록 cb를 등록한다.
             if (cb != null) mCallbacks.register(cb);
-        }
+        }// ApiDemos:Remote binder thread에서 호출된다.
         public void unregisterCallback(IRemoteServiceCallback cb) {
             if (cb != null) mCallbacks.unregister(cb);
         }
