@@ -1,3 +1,10 @@
+/*
+ * KJK_TALK APIDEMOS: App-> Service-> Messenger Service-> MessengerServiceActivity.java
+
+ * AIDL을 사용하지 않고  Messenger Service를 이용하여 자신이 만든 Service와 통신하는 예제로
+ * RemoteService Binding Activity에 비해 훨씬 간편함을 알수 있다.
+ */
+
 package com.example.android.apis.app;
 
 import com.example.android.apis.R;
@@ -56,7 +63,7 @@ public class MessengerServiceActivities {
         
         /**
          * Target we publish for clients to send messages to IncomingHandler.
-         */
+         *///KJK_TALK: Messenger Service에서 msg를 받았을 경우 처리하는 routine(handler)를 등록한다.
         final Messenger mMessenger = new Messenger(new IncomingHandler());
         
         /**
@@ -70,7 +77,7 @@ public class MessengerServiceActivities {
                 // interact with the service.  We are communicating with our
                 // service through an IDL interface, so get a client-side
                 // representation of that from the raw service object.
-                mService = new Messenger(service);
+                mService = new Messenger(service); //KJK_TALK: Messenger Service를 생성한다.
                 mCallbackText.setText("Attached.");
 
                 // We want to monitor the service for as long as we are
@@ -79,7 +86,7 @@ public class MessengerServiceActivities {
                     Message msg = Message.obtain(null,
                             MessengerService.MSG_REGISTER_CLIENT);
                     msg.replyTo = mMessenger;
-                    mService.send(msg);
+                    mService.send(msg); //KJK_TALK: Message Service를 이용하면 msg전송이 편하다. 서버로 전송
                     
                     // Give it some value as an example.
                     msg = Message.obtain(null,

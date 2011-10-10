@@ -20,7 +20,7 @@ package com.example.android.apis.app;
  * Example of a callback interface used by IRemoteService to send
  * synchronous notifications back to its clients.  Note that this is a
  * one-way interface so the server does not block waiting for the client.
- */
+ */ //KJK_TALK Oneway는 server가 해당 method를 non blocking call을 하는것을 말한다.
 oneway interface IRemoteServiceCallback {
     /**
      * Called when the service has a new value for you.

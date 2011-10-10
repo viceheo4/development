@@ -1,4 +1,9 @@
 /*
+
+ * KJK_TALK APIDEMOS: App-> Activity->Reorder Activities
+ * act A-->B-->C-->D가 잇을경우 act B를 A-->C-->D-->B 와 같이 stack의 top으로 두는 방법
+ * 즉, act를 stack에서 위치를 이동할수 잇다. 관련 option 참조 바람.
+
  * Copyright (C) 2009 The Android Open Source Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");

@@ -1,5 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- Copyright (C) 2007 The Android Open Source Project
+/*
+KJK_TALK APIDEMOS: android에서 사용되는 string을 선언하는 xml구문으로 다음과 같은 역활을 한다.
+<b>: bold
+<i>: italic
+\"' : ",'앞에는 \로 특수문자 입력 표시
+<xliff:g> : appWidget에서 %d,%s 문자열을 출력하기 위한 tag로 사용
+*/
 
      Licensed under the Apache License, Version 2.0 (the "License");
      you may not use this file except in compliance with the License.
@@ -25,22 +32,22 @@
     <string name="tabs_1_tab_2">tab2</string>
     <string name="tabs_1_tab_3">tab3</string>
 
-    <string name="activity_hello_world">App/Activity/<b>Hello <i>World</i></b></string>
+    <string name="activity_hello_world">App/Aa.Activity/A01---<b>Hello <i>World</i></b></string>
     <string name="hello_world"><b>Hello, <i>World!</i></b></string>
 
-    <string name="activity_dialog">App/Activity/Dialog</string>
+    <string name="activity_dialog">App/Aa.Activity/A02---Dialog</string>
     <string name="dialog_activity_text">Example of how you can use the
             Theme.Dialog theme to make an activity that looks like a
             dialog.</string>
-    <string name="activity_custom_dialog">App/Activity/Custom Dialog</string>
+    <string name="activity_custom_dialog">App/Aa.Activity/A03---Custom Dialog</string>
     <string name="custom_dialog_activity_text">Example of how you can use a
             custom Theme.Dialog theme to make an activity that looks like a
             customized dialog, here with an ugly frame.</string>
 
-    <string name="quick_contacts_demo">App/Activity/QuickContactsDemo</string>
+    <string name="quick_contacts_demo">App/Aa.Activity/A22---QuickContactsDemo</string>
 
-    <string name="activity_wallpaper">App/Activity/Wallpaper</string>
-    <string name="activity_setwallpaper">App/Activity/SetWallpaper</string>
+    <string name="activity_wallpaper">App/Aa.Activity/A06---Wallpaper</string>
+    <string name="activity_setwallpaper">App/Aa.Activity/A07---SetWallpaper</string>
     <string name="set_wallpaper">Set Wallpaper</string>
     <string name="randomize">Randomize</string>
 
@@ -50,38 +57,38 @@
         instead of programmatically.</string>
     <string name="screen_orientation">Screen Orientation</string>
     
-    <string name="activity_translucent">App/Activity/Translucent</string>
+    <string name="activity_translucent">App/Aa.Activity/A04---Translucent</string>
     <string name="translucent_background">Example of how you can make an
             activity have a translucent background, compositing over
             whatever is behind it.</string>
 
-    <string name="activity_translucent_blur">App/Activity/Translucent Blur</string>
+    <string name="activity_translucent_blur">App/Aa.Activity/A05---Translucent Blur</string>
 
-    <string name="activity_animation">App/Activity/Animation</string>
+    <string name="activity_animation">App/Aa.Activity/A08---Animation</string>
     <string name="activity_animation_msg">Press a button to launch an activity with a custom animation.</string>
     <string name="activity_animation_fade">Fade in</string>
     <string name="activity_animation_zoom">Zoom in</string>
 
-    <string name="activity_save_restore">App/Activity/Save &amp; Restore State</string>
+    <string name="activity_save_restore">App/Aa.Activity/A11---Save &amp; Restore State</string>
     <string name="save_restore_msg">Demonstration of saving and restoring activity state in onSaveInstanceState() and onCreate().</string>
     <string name="saves_state">This text field saves its state:</string>
     <string name="no_saves_state">This text field does not save its state:</string>
     <string name="initial_text">Initial text.</string>
 
-    <string name="activity_persistent">App/Activity/Persistent State</string>
+    <string name="activity_persistent">App/Aa.Activity/A12---Persistent State</string>
     <string name="persistent_msg">Demonstration of persistent activity state with getPreferences(0).edit() and getPreferences(0).</string>
 
-    <string name="activity_receive_result">App/Activity/Receive Result</string>
+    <string name="activity_receive_result">App/Aa.Activity/A13---Receive Result</string>
     <string name="pick_result">Pick a result to send, or BACK to cancel.</string>
     <string name="corky">Corky</string>
     <string name="violet">Violet</string>
 
-    <string name="activity_forwarding">App/Activity/Forwarding</string>
+    <string name="activity_forwarding">App/Aa.Activity/A14---Forwarding</string>
     <string name="forwarding">Press the button to go forward to the next activity.  This activity will stop, so you will no longer see it when going back.</string>
     <string name="go">Go</string>
     <string name="forward_target">Press back button and notice we don\'t see the previous activity.</string>
 
-    <string name="activity_redirect">App/Activity/Redirection</string>
+    <string name="activity_redirect">App/Aa.Activity/A15---Redirection</string>
     <string name="redirect_enter">Press the button to start the example.  The next activity will conditionally redirect to another activity to collect data from the user.</string>
     <string name="redirect_main">You now see the main activity running normally because the user text has been set to:</string>
     <string name="clear_text">Clear and Exit</string>
@@ -89,7 +96,7 @@
     <string name="redirect_getter">Enter the text that will be used by the main activity.  Press back to cancel.</string>
     <string name="apply">Apply</string>
 
-    <string name="activity_menu">App/Activity/Menu</string>
+    <string name="activity_menu">App/Aa.Activity/Menu</string>
     <string name="open_menu">Open menu</string>
     <string name="close_menu">Close menu</string>
     <string name="toggle_scenery">Toggle scenery</string>
@@ -100,13 +107,13 @@
     <string name="local_service_stopped">Local service has stopped</string>
     <string name="local_service_label">Sample Local Service</string>
 
-    <string name="activity_local_service_controller">App/Service/Local Service Controller</string>
+    <string name="activity_local_service_controller">App/Ac.Service/B01---Local Service Controller</string>
     <string name="local_service_controller">This demonstrates how you can implement persistent services that
         may be started and stopped as desired.</string>
     <string name="start_service">Start Service</string>
     <string name="stop_service">Stop Service</string>
 
-    <string name="activity_local_service_binding">App/Service/Local Service Binding</string>
+    <string name="activity_local_service_binding">App/Ac.Service/B02---Local Service Binding</string>
     <string name="local_service_binding">This demonstrates how you can connect with a persistent
         service.  Notice how it automatically starts for you, and play around with the
         interaction between this and Local Service Controller.</string>
@@ -115,7 +122,7 @@
     <string name="local_service_connected">Connected to local service</string>
     <string name="local_service_disconnected">Disconnected from local service</string>
 
-    <string name="activity_messenger_service_binding">App/Service/Messenger Service</string>
+    <string name="activity_messenger_service_binding">App/Ac.Service/D01---Messenger Service</string>
     <string name="messenger_service_binding">This demonstrates how you can communicate with
         a remote service using Messenger.</string>
 
@@ -123,11 +130,11 @@
     <string name="remote_service_stopped">Remote service has stopped</string>
     <string name="remote_service_label">Sample Remote Service</string>
 
-    <string name="activity_remote_service_controller">App/Service/Remote Service Controller</string>
+    <string name="activity_remote_service_controller">App/Ac.Service/C01---Remote Service Controller</string>
     <string name="remote_service_controller">This demonstrates how you can implement persistent services
         running in a separate process that may be started and stopped as desired.</string>
 
-    <string name="activity_remote_service_binding">App/Service/Remote Service Binding</string>
+    <string name="activity_remote_service_binding">App/Ac.Service/C02---Remote Service Binding</string>
     <string name="remote_service_binding">This demonstrates how you can connect with a persistent
         service running in another process.  Use the kill button to see what happens when
         the process crashes.</string>
@@ -139,9 +146,10 @@
     <string name="service_start_arguments_label">Sample Service Start Arguments
     </string>
 
-    <string name="activity_service_start_arguments_controller">App/Service/Service
+    <string name="activity_service_start_arguments_controller">App/Ac.Service/E01---Service
         Start Arguments Controller
     </string>
+    
     <string name="service_start_arguments_controller">This demonstrates how
         service can be started with arguments, and run until all arguments are
         processed.
@@ -156,7 +164,7 @@
     <string name="foreground_service_started">Service is in the foreground</string>
     <string name="foreground_service_label">Sample Foreground Service</string>
 
-    <string name="activity_foreground_service_controller">App/Service/Foreground Service Controller</string>
+    <string name="activity_foreground_service_controller">App/Ac.Service/A01---Foreground Service Controller</string>
     <string name="foreground_service_controller">This demonstrates how you can
             implement services that run in the foreground when needed.</string>
     <string name="start_service_foreground">Start Service Foreground</string>
@@ -165,7 +173,7 @@
     <string name="one_shot_received">The one-shot alarm has gone off</string>
     <string name="repeating_received">The repeating alarm has gone off</string>
 
-    <string name="activity_alarm_controller">App/Alarm/Alarm Controller</string>
+    <string name="activity_alarm_controller">App/Ab.Alarm/A01---Alarm Controller</string>
     <string name="alarm_controller">This demonstrates how to schedule and handle
         one-shot and repeating alarms.</string>
     <string name="one_shot_alarm">One Shot Alarm</string>
@@ -181,7 +189,7 @@
     <string name="alarm_service_finished">The alarm service has finished running</string>
     <string name="alarm_service_label">Sample Alarm Service</string>
 
-    <string name="activity_alarm_service">App/Alarm/Alarm Service</string>
+    <string name="activity_alarm_service">App/Ab.Alarm/A02---Alarm Service</string>
     <string name="alarm_service">This demonstrates how to schedule a repeating
         alarm that will initiate a long-lived operation through a service.</string>
     <string name="start_alarm_service">Start Alarm Service</string>
@@ -199,7 +207,7 @@
     <string name="contacts_filter">This demonstrates an Instrumentation package that
         launches the contacts list and simulates user events to filter it.</string>
 
-    <string name="pick_image_label">App/Activity/PickImage</string>
+    <string name="pick_image_label">App/Aa.Activity/PickImage</string>
     <string name="pick_image">Pick Image</string>
 
     <string name="short_notification_text">Short notification</string>
@@ -209,13 +217,13 @@
     <string name="notifying_service_controller">This service will update a status bar notification
                   every 5 seconds for a minute</string>
 
-    <string name="activity_custom_title">App/Activity/Custom Title</string>
+    <string name="activity_custom_title">App/Aa.Activity/A21---Custom Title</string>
     <string name="custom_title_left">Left is best</string>
     <string name="custom_title_right">Right is always right</string>
     <string name="custom_title_left_button">Change Left</string>
     <string name="custom_title_right_button">Change Right</string>
 
-    <string name="activity_reorder">App/Activity/Reorder Activities</string>
+    <string name="activity_reorder">App/Aa.Activity/A16---Reorder Activities</string>
     <string name="reorder_on_launch">This is the first of a sequence of four Activities.  A button on the fourth will use the Intent.FLAG_ACTIVITY_REORDER_TO_FRONT flag to bring the second of the activities to the front of the history stack. After that, proceeding back through the history should begin with the newly-frontmost second reorder activity, then the fourth, the third, and finally the first.</string>
     <string name="reorder_launch_two">Go to the second</string>
     <string name="reorder_two_text">This is the second in a sequence of four Activities.</string>
@@ -225,13 +233,13 @@
     <string name="reorder_four_text">This is the last in a sequence of four Activities.</string>
     <string name="reorder_second_to_front">Bring the second in front</string>
 
-    <string name="menu_from_xml_title">App/Menu/Inflate from XML</string>
+    <string name="menu_from_xml_title">App/Cb.Menu/Inflate from XML</string>
     <string name="menu_from_xml_instructions_press_menu">Select a menu resource and press the menu key.</string>
     <string name="menu_from_xml_instructions_go_back">If you want to choose another menu resource, go back and re-run this activity.</string>
 
-    <string name="voice_recognition">App/Voice Recognition</string>
+    <string name="voice_recognition">App/Eb.Voice Recognition</string>
 
-    <string name="text_to_speech">App/Text-To-Speech</string>
+    <string name="text_to_speech">App/Ea.Text-To-Speech</string>
     <string name="again">Again</string>
 
     <!-- ============================== -->
@@ -265,7 +273,7 @@
     <!--  app/intents examples strings     -->
     <!-- ============================== -->
 
-    <string name="activity_intents">App/Intents</string>
+    <string name="activity_intents">App/Ba.Intents</string>
     <string name="intents">Example of launching various Intents.</string>
     <string name="get_music">Get Music</string>
 
@@ -303,7 +311,7 @@
     <!--  app/dialog examples strings  -->
     <!-- ============================== -->
 
-    <string name="activity_alert_dialog">App/Dialog</string>
+    <string name="activity_alert_dialog">App/Ca.Dialog</string>
     <string name="alert_dialog_two_buttons">OK Cancel dialog with a message</string>
     <string name="alert_dialog_two_buttons2">OK Cancel dialog with a long message</string>
     <string name="alert_dialog_select_button">List dialog</string>
@@ -363,12 +371,12 @@
     <!--  app/menu examples strings     -->
     <!-- ============================== -->
 
-    <string name="preferences_from_xml">App/Preferences/1. Preferences from XML</string>
-    <string name="launching_preferences">App/Preferences/2. Launching preferences</string>
-    <string name="preference_dependencies">App/Preferences/3. Preference dependencies</string>
-    <string name="default_values">App/Preferences/4. Default values</string>
-    <string name="preferences_from_code">App/Preferences/5. Preferences from code</string>
-    <string name="advanced_preferences">App/Preferences/6. Advanced preferences</string>
+    <string name="preferences_from_xml">App/Cc.Preferences/1. Preferences from XML</string>
+    <string name="launching_preferences">App/Cc.Preferences/2. Launching preferences</string>
+    <string name="preference_dependencies">App/Cc.Preferences/3. Preference dependencies</string>
+    <string name="default_values">App/Cc.Preferences/4. Default values</string>
+    <string name="preferences_from_code">App/Cc.Preferences/5. Preferences from code</string>
+    <string name="advanced_preferences">App/Cc.Preferences/6. Advanced preferences</string>
 
     <string name="launch_preference_activity">Launch PreferenceActivity</string>
     <string name="counter_value_is">The counter value is</string>
@@ -428,7 +436,7 @@
     <!--  app/search examples strings  -->
     <!-- ============================== -->
 
-    <string name="search_invoke">App/Search/Invoke Search</string>
+    <string name="search_invoke">App/Ea.Search/Invoke Search</string>
     <string name="msg_search">This activity shows a few different ways to invoke search, and inserts context-specific data for use by the search activity.</string>
     <string name="search_sect_invocation">Ways to invoke search</string>
     <string name="label_onsearchrequested">onSearchRequested()</string>
@@ -436,7 +444,7 @@
     <string name="label_search_query_prefill">"Prefill query: "</string>
     <string name="label_search_query_appdata">"App Data: "</string>
 
-    <string name="search_query_results">App/Search/Query Search Results</string>
+    <string name="search_query_results">App/Ea.Search/Query Search Results</string>
     <string name="msg_search_results">This activity accepts query strings via the ACTION_SEARCH intent.  In a full implementation, you would use the query string to select results from your data source, and present a list of those results to the user.</string>
     <string name="label_search_query">"Query String: "</string>
     <string name="label_search_appdata">"Query App Data: "</string>
@@ -448,8 +456,8 @@
     <!-- ================================ -->
     <!--  app/shortcuts examples strings  -->
     <!-- ================================ -->
-
-    <string name="shortcuts">App/Launcher Shortcuts</string>
+ 
+    <string name="shortcuts">App/Bb.Launcher Shortcuts</string>
     <string name="sample_shortcuts">ApiDemos</string>
     <string name="shortcut_name">Sample</string>
 
@@ -460,7 +468,7 @@
     <!--  app/device policies examples strings     -->
     <!-- ============================== -->
 
-    <string name="activity_sample_device_admin">App/Device Admin</string>
+    <string name="activity_sample_device_admin">App/Da.Device Admin</string>
     <string name="sample_device_admin">Sample Device Admin</string>
     <string name="sample_device_admin_description">Sample code for writing
         a DeviceAdmin class.  This implementation provides a UI (in ApiDemos)
@@ -524,6 +532,7 @@
     <string name="linear_layout_8_right">Right</string>
     <string name="linear_layout_10_from">From:</string>
     <string name="linear_layout_10_to">To:</string>
+    <string name="list_7_nothing">Nothing\u2026</string>
     <string name="radio_group_snack">Snack</string>
     <string name="radio_group_selection">"You have selected: "</string>
     <string name="radio_group_none">(none)</string>

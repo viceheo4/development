@@ -1,4 +1,9 @@
 /*
+ * KJK_TALK APIDEMOS: App-> Content-> Resources-> Resources
+ * CharSequence와 String의 차이점을 보여주는 예제로 CharSequence는 Style 속성을 가지고 있다.
+ * 일반 view에서 Activity의 resource를 가져오기 위해 context.getResources()를 사용했다. 
+
+
  * Copyright (C) 2007 The Android Open Source Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -53,16 +58,18 @@ public class ResourcesSample extends Activity
         String str;
 
         // ====== Using the Context.getString() convenience method ===========
-
+        // KJK_TALK: CharSequence와 String과의 차이점
         // Using the getString() conevenience method, retrieve a string
         // resource that hapepns to have style information.  Note the use of
         // CharSequence instead of String so we don't lose the style info.
+        // CharSequence
         cs = getText(R.string.styled_text);
         tv = (TextView)findViewById(R.id.styled_text);
         tv.setText(cs);
 
         // Use the same resource, but convert it to a string, which causes it
         // to lose the style information.
+        //KJK_TALK: String, CharSequence을 String으로 바꾸면 Style 속성을 잃는다.
         str = getString(R.string.styled_text);
         tv = (TextView)findViewById(R.id.plain_text);
         tv.setText(str);
@@ -72,6 +79,7 @@ public class ResourcesSample extends Activity
         // You might need to do this if your code is not in an activity.
         // For example View has a protected mContext field you can use.
         // In this case it's just 'this' since Activity is a context.
+        //KJK_TALK: 일반 view에서 activity에 달린 Char등의 resource를 읽어오는 방법
         Context context = this;
 
         // Get the Resources object from our context
@@ -82,6 +90,7 @@ public class ResourcesSample extends Activity
         tv = (TextView)findViewById(R.id.res1);
         tv.setText(cs);
 
+        //KJK_TALK: 이미 theme 정보는 resource에 들어 있으므로 getXXX함수로 가져다 쓰면 된다.
         // Note that the Resources class has methods like getColor(),
         // getDimen(), getDrawable() because themes are stored in resources.
         // You can use them, but you might want to take a look at the view

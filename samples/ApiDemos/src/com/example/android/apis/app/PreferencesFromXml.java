@@ -1,4 +1,10 @@
 /*
+ * KJK_TALK APIDEMOS: App-> Preferences-> 1. Preferences from XML
+   preferences.xml에 기술된대로 UI를 구성한다.
+   이는 Settings에서 사용될 UI 구성을 일컫는 전형적인 xml을 말한다.
+   ApiDemos분석.xls 파일 참고
+
+
  * Copyright (C) 2007 The Android Open Source Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -21,7 +27,7 @@ import com.example.android.apis.R;
 import android.os.Bundle;
 import android.preference.PreferenceActivity;
 
-public class PreferencesFromXml extends PreferenceActivity {
+public class PreferencesFromXml extends PreferenceActivity { //KJK_TALK: PreferenceActivity 를 상속
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

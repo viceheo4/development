@@ -1,4 +1,16 @@
 /*
+ * KJK_TALK APIDEMOS: App-> Alarm-> Alarm Controller
+ * AlaramController는 OneShotTimer와 RepeatTimer BroadCast Receiver를 등록하는데
+ * 두 경우 다  다른 process에서 잠시 동작하고 종료하게 된다. RepeatTimer같은 경우
+ * 등록된 Alarm이 SystemServer에 의해 구동되고 그때마다 RepeatTimer를 동작시키게 되므로 
+ * 해당 process를 강제로 죽이더라도 SystemServer에 의해 새로 생성되어 실행되게 된다.
+
+   KJK_TALK PENDING INTENT: 
+   일반 intent와 다르게 제 3자에게 intent를 대신 보내달라고 할때 사용하는 intents다.
+   그러므로 잠시 제 3자가 가지고 있다가 전달하게 된다.
+   아래와 같은 경우에는 AlarmManager가 PendingIntent를 대신보내게 된다. 
+   
+
  * Copyright (C) 2007 The Android Open Source Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -88,17 +100,23 @@ public class AlarmController extends Activity {
             // name to have our own receiver (which has been published in
             // AndroidManifest.xml) instantiated and called, and then create an
             // IntentSender to have the intent executed as a broadcast.
+            //KJK_TALK: alarm시 실행해야할 동작을 intent로 만든다.OneShotAlarm:remote을 실행한다.
             Intent intent = new Intent(AlarmController.this, OneShotAlarm.class);
+
+            //broadcast로 보낼 intent를 획득한다.
             PendingIntent sender = PendingIntent.getBroadcast(AlarmController.this,
                     0, intent, 0);
 
-            // We want the alarm to go off 30 seconds from now.
+            // We want the alarm to go off 5 seconds from now.
             Calendar calendar = Calendar.getInstance();
-            calendar.setTimeInMillis(System.currentTimeMillis());
-            calendar.add(Calendar.SECOND, 30);
-
-            // Schedule the alarm!
+            // setTimeInMillis는 calender에 설정된 현재 시간정보를 가져오는 함수.
+            calendar.setTimeInMillis(System.currentTimeMillis());//현재 시간을 설정하여 가져온다.
+            calendar.add(Calendar.SECOND, 5);//현재시각에 5초 지난 시각을 더해 재설정한다. 이후 이시각으로 alarm을 호출한다.
+            //여기서는 calendar를 사용하여 time format으로 알람을 설정하였다.
+            // Schedule the alarm!, 알람설정
             AlarmManager am = (AlarmManager)getSystemService(ALARM_SERVICE);
+            //5초지난 시각에 알람이 설정되고, alarm시 sender가 호출되도록 pending intent를 보내게 된다.
+            // 이후 pending intents는 OneShotAlarm remote process를 만들게 된다.
             am.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), sender);
 
             // Tell the user about what we did.
@@ -125,13 +143,13 @@ public class AlarmController extends Activity {
                     0, intent, 0);
             
             // We want the alarm to go off 30 seconds from now.
-            long firstTime = SystemClock.elapsedRealtime();
-            firstTime += 15*1000;
-
+            long firstTime = SystemClock.elapsedRealtime();//booting후 부터 지나간 시간 구하기
+            firstTime += 5*1000;
+            //여기서는 long type을 사용하여 long format으로 알람을 설정하였다.
             // Schedule the alarm!
             AlarmManager am = (AlarmManager)getSystemService(ALARM_SERVICE);
             am.setRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP,
-                            firstTime, 15*1000, sender);
+                            firstTime, 5*1000, sender);//KJK_TALK: RepeatingAlarm:remote을 실행한다.
 
             // Tell the user about what we did.
             if (mToast != null) {
@@ -151,8 +169,10 @@ public class AlarmController extends Activity {
             PendingIntent sender = PendingIntent.getBroadcast(AlarmController.this,
                     0, intent, 0);
             
-            // And cancel the alarm.
+            // And cancel the alarm. 알람 서비스에게 중지 명령을 날린다.
             AlarmManager am = (AlarmManager)getSystemService(ALARM_SERVICE);
+
+            //IAlarmManager.java의 remove method를 통하여 mRemote.transact(Stub.TRANSACTION_remove, _data, _reply, 0); 호출
             am.cancel(sender);
 
             // Tell the user about what we did.

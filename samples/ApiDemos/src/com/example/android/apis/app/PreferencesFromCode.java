@@ -1,4 +1,10 @@
 /*
+ * KJK_TALK APIDEMOS: App-> Preferences-> 5. Preferences from code
+   1번 예제가 preferences.xml을 이용하여 화면을 구성하였다면, 
+   5번 예제에서는 모두 code를 이용하여 1번예제와 똑같이 preference 화면을 구성한다.
+   ApiDemos분석.xls 파일 참고
+
+
  * Copyright (C) 2007 The Android Open Source Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -34,12 +40,14 @@ public class PreferencesFromCode extends PreferenceActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        
+
+        //KJK_TALK: code로 preference를 생성하기 위해서는 xml inflate하듯이 
+        //추가적으로 preference 환경을 loading해야 한다.
         setPreferenceScreen(createPreferenceHierarchy());
     }
 
     private PreferenceScreen createPreferenceHierarchy() {
-        // Root
+        // Root, preference screen을 만든다.
         PreferenceScreen root = getPreferenceManager().createPreferenceScreen(this);
         
         // Inline preferences 

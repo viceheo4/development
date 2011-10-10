@@ -1,4 +1,9 @@
 /*
+ * KJK_TALK APIDEMOS: App-> Activity-> Custom Dialog 
+ * activity를 이용하여 dialog 처럼 보이도록 하는 방법. theme를 이용한다.
+ * AndroidManifest.xml 에서 android:theme="@style/Theme.CustomDialog 로 선언되어 잇어 dialog처럼 보인다.
+ * res/value/styles.xml에 CustomDialog를 추가한것. 
+
  * Copyright (C) 2008 The Android Open Source Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");

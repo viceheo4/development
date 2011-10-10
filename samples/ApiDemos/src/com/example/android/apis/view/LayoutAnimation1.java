@@ -1,4 +1,9 @@
 /*
+ * KJK_TALK APIDEMOS: Views-> Layout Animation-> 1.Grid Fade-> LayoutAnimation1.java
+ * title bar의 string을 바꾸는 예제
+ * 참고로 title bar는 notification windor (indicator)와는 다름.
+
+
  * Copyright (C) 2007 The Android Open Source Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");

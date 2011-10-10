@@ -1,4 +1,9 @@
 /*
+ * KJK_TALK APIDEMOS: App -> Alarm-> Alarm Controller-> OneShotAlarm.java
+ * androidManifest.xml 파일에서 <receiver android:name=".app.OneShotAlarm" android:process=":remote" />와 
+ * 같이 기술되어 remote process로 launch된다.
+
+
  * Copyright (C) 2007 The Android Open Source Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -35,7 +40,7 @@ public class OneShotAlarm extends BroadcastReceiver
 {
     @Override
     public void onReceive(Context context, Intent intent)
-    {
+    {//Broadcast Msg를 받으면 toast를 보여준다.
         Toast.makeText(context, R.string.one_shot_received, Toast.LENGTH_SHORT).show();
     }
 }

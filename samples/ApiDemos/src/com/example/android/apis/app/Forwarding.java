@@ -1,4 +1,9 @@
 /*
+ * KJK_TALK APIDEMOS: App-> Activity-> Forwarding
+ activity replace를 보여주는 예제로 자신을 끝내고 가면 stack에는 
+ 새로운 activity가 top activity로 된다.
+ 만약 끝내지 않고 가면 insert가 되게 된다.
+
  * Copyright (C) 2007 The Android Open Source Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -78,6 +83,9 @@ public class Forwarding extends Activity
             Intent intent = new Intent();
             intent.setClass(Forwarding.this, ForwardTarget.class);
             startActivity(intent);
+            //KJK_TALK: 자신을 끝내고 가면 stack에는 새로운 activity가 top activity로 된다. 즉 replace
+            //끝내지 않고 가면 top이지만 insert가 된다.
+            //이때 먼저 startActivity를 해주고 자신을 끝내야 한다.
             finish();
         }
     };

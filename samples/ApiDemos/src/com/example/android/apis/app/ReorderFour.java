@@ -1,4 +1,10 @@
 /*
+ * KJK_TALK APIDEMOS: App-> Activity->Reorder Activities-->ReorderTwo-->ReorderThree-->ReorderFour.java
+ * act ReorderTwo를 호출한다. 그러나 FLAG_ACTIVITY_REORDER_TO_FRONT를 추가함으로서 
+ * 해당 act를 stack의 맨위로 이동시킨다. 참고로 act를 어덯게 launch하느냐는 다양한 option이 
+ * 존재한다.
+
+
  * Copyright (C) 2009 The Android Open Source Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");

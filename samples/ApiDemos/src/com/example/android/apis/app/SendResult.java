@@ -1,4 +1,8 @@
 /*
+ KJK_TALK APIDEMOS: App-> Activity-> ReceiveResult->SendResult.java
+ ReceiveResult에 결과값을 전달하는 예제
+
+
  * Copyright (C) 2007 The Android Open Source Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -62,6 +66,7 @@ public class SendResult extends Activity
         {
             // To send a result, simply call setResult() before your
             // activity is finished.
+            // KJK_TALK: 결과값을 보낼때 setResult 함수를 사용한다.
             setResult(RESULT_OK, (new Intent()).setAction("Corky!"));
             finish();
         }

@@ -1,4 +1,10 @@
 /*
+ *
+ * KJK_TALK APIDEMOS: App-> Alarm -> Alarm Service -> AlarmService_Service.java
+ *
+ * Alarm Service에서 AlarmService_Service를 remote service process로 구동시키며, 
+ * 여기서 다시 새로운 thread를 생성시켜 10초 이상의 특정한 일을 하는것을 허용하게 한다. 
+
  * Copyright (C) 2007 The Android Open Source Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -31,6 +37,8 @@ import android.os.Parcel;
 import android.os.RemoteException;
 import android.widget.Toast;
 
+import com.example.android.apis.R;
+
 /**
  * This is an example of implementing an application service that will run in
  * response to an alarm, allowing us to move long duration work out of an
@@ -41,6 +49,7 @@ import android.widget.Toast;
  */
 public class AlarmService_Service extends Service {
     NotificationManager mNM;
+    int mCount;
 
     @Override
     public void onCreate() {
@@ -65,7 +74,7 @@ public class AlarmService_Service extends Service {
         Toast.makeText(this, R.string.alarm_service_finished, Toast.LENGTH_SHORT).show();
     }
 
-    /**
+    /** KJK_TALK: msg를 받을때마다 매번 새로 생성된다.
      * The function that runs in our worker thread
      */
     Runnable mTask = new Runnable() {
@@ -77,12 +86,14 @@ public class AlarmService_Service extends Service {
                 synchronized (mBinder) {
                     try {
                         mBinder.wait(endTime - System.currentTimeMillis());
+                        mCount = mCount +1;
                     } catch (Exception e) {
                     }
                 }
             }
 
             // Done with our work...  stop the service!
+            // 즉 while문으로 5초 동안 기다렷다가 스스로를 없앤다.
             AlarmService_Service.this.stopSelf();
         }
     };
@@ -97,7 +108,7 @@ public class AlarmService_Service extends Service {
      */
     private void showNotification() {
         // In this sample, we'll use the same text for the ticker and the expanded notification
-        CharSequence text = getText(R.string.alarm_service_started);
+        CharSequence text = getText(R.string.alarm_service_started) + String.valueOf(mCount);//IntToString(mCount);
 
         // Set the icon, scrolling text and timestamp
         Notification notification = new Notification(R.drawable.stat_sample, text,

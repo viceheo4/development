@@ -18,7 +18,8 @@
      See DefaultValues.java for more information. -->
 <PreferenceScreen
         xmlns:android="http://schemas.android.com/apk/res/android">
-
+    <!-- KJK_TALK: default value property로 true, title_edittext_preference, default_value_list_preference로 
+    설정 -->
     <CheckBoxPreference
             android:key="default_toggle"
             android:defaultValue="true"
@@ -31,7 +32,9 @@
             android:title="@string/title_edittext_preference"
             android:summary="@string/summary_edittext_preference"
             android:dialogTitle="@string/dialog_title_edittext_preference" />
-            
+    <!--entries_list_preference entry string 들-->        
+    <!--entryvalues_list_preference entry id 들 -->
+    <!--default_value_list_preference entry id-->
     <ListPreference
             android:key="default_list"
             android:defaultValue="@string/default_value_list_preference"

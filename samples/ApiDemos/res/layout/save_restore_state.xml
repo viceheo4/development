@@ -46,6 +46,12 @@
         android:paddingTop="8dip"
         android:paddingBottom="4dip"
         android:text="@string/no_saves_state"/>
+    <!-- KJK_TALK added -->
+    <Button android:id="@+id/added"
+        android:layout_width="wrap_content" android:layout_height="wrap_content"
+        android:text="@string/reorder_launch_two">
+    </Button>
+    
 
     <EditText 
         android:layout_width="match_parent" android:layout_height="wrap_content"

@@ -1,4 +1,10 @@
 /*
+ * KJK_TALK APIDEMOS: App-> Activity-> Redirection
+act A-> B-> C가 있는데, B를 사용자의 눈에 보여주지 않고, 바로 C로 가는 효과를  나타내는 예제로 
+만약 C에서 어떤 값을 insert 한다면 B가 생성되어 돌아갈때 B를 거쳐서 돌아가도록 하고, 
+ 그냥 back key로 취소한다면 C-> A로 바로 가도록 구성하였다.
+ 
+
  * Copyright (C) 2007 The Android Open Source Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -53,6 +59,7 @@ public class RedirectEnter extends Activity
             // example.
             Intent intent = new Intent(RedirectEnter.this, RedirectMain.class);
             startActivity(intent);
+            //KJK_TALK: finish()하지 않으므로 act stack에 존재한다.
         }
     };
 }

@@ -1,4 +1,13 @@
 /* 
+ * KJK_TALK APIDEMOS: Text-> Marquee
+ *
+ * 해당 button에 key를 이용하여 "focus"를 주면 button보다 긴 text가
+ * 자동적으로 scrolling된다. 이 횟수를 test하는 example이다.
+ * layout xml 파일의 button 속성에 marquee를 주면 default로 3번 
+ * 추가적으로 android:marqueeRepeatLimit에 횟수를 강제로 입력가능하며
+ * marquee_forever를 주면 무한 반복한다.
+
+
  * Copyright (C) 2007 Google Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");

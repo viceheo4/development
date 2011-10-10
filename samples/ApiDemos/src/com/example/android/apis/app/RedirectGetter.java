@@ -1,4 +1,9 @@
 /*
+ * KJK_TALK APIDEMOS: App-> Activity-> Redirection ->RedirectMain-->RedirectGetter.java
+ * 단순히 문자열을 입력받아 content provider중에 preference type에 저장하고
+ * RESULT_OK를 반환해준다.
+
+
  * Copyright (C) 2007 The Android Open Source Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -72,15 +77,15 @@ public class RedirectGetter extends Activity
     private OnClickListener mApplyListener = new OnClickListener()
     {
         public void onClick(View v)
-        {
+        {	//KJK_TALK: content provider중에 preference type을 redirect, private mode로 생성한다.
             SharedPreferences preferences = getSharedPreferences("RedirectData", 0);
-            SharedPreferences.Editor editor = preferences.edit();
+            SharedPreferences.Editor editor = preferences.edit();//DB와 바로 연동되는 editor interface를 만든다.
             editor.putString("text", mText.getText().toString());
 
-            if (editor.commit()) {
+            if (editor.commit()) { //DB에 저장한다.
                 setResult(RESULT_OK);
             }
-
+			// act stack에서 제거 한다.
             finish();
         }
     };

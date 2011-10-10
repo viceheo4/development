@@ -1,4 +1,9 @@
 /*
+ * KJK_TALK APIDEMOS: App-> Intents NEEDTOSTUDY
+ * 특정한 intent를 만들고 그 intent를 처리할수 있는 candidate application을
+ * 선택할수 있는 popup으로 띄워 user가 고르면 start시킨다.
+ * 이런 popup은 ACTION_CHOOSER intent action으로 띄우게 된다.
+
  * Copyright (C) 2008 The Android Open Source Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -39,8 +44,13 @@ public class Intents extends Activity {
 
     private OnClickListener mGetMusicListener = new OnClickListener() {
         public void onClick(View v) {
+            //Intent의 용법중에 ACTION_GET_CONTENT로 설정하여
             Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+            //관련 type을 다룰수 있는 app를 launch할수 잇도록 한다.
             intent.setType("audio/*");
+            //제목과 audio type을 다루는 activity를 실행해라 
+            //Select music을 제목으로 한 dialog을 launch다.
+            //intentaction으로 ACTION_CHOOSER를 넣는다.
             startActivity(Intent.createChooser(intent, "Select music"));
         }
     };

@@ -1,4 +1,8 @@
 /* 
+ * KJK_TALK APIDEMOS: App-> Voice Recognition
+ KJK_TALK NEEDTOSTUDY 어떻게 해야 voice recognition을 동작시키는지 모르겠다.
+
+
  * Copyright (C) 2008 The Android Open Source Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -58,6 +62,7 @@ public class VoiceRecognition extends Activity implements OnClickListener {
         mList = (ListView) findViewById(R.id.list);
 
         // Check to see if a recognition activity is present
+        //KJK_TALK: 여기서 recognition activity 가 존재하지 않는다.
         PackageManager pm = getPackageManager();
         List<ResolveInfo> activities = pm.queryIntentActivities(
                 new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH), 0);

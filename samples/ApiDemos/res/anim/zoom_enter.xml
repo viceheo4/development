@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
 /*
+KJK_TALK APIDEMOS: App-> Animation-> Animation.java 에서 참조하는 animation 관련된 xml 기술 파일로
+여러개의 animation 효과를 내기위해서는  set구문으로 감싸줘야 한다.
+
 ** Copyright 2009, The Android Open Source Project
 **
 ** Licensed under the Apache License, Version 2.0 (the "License"); 

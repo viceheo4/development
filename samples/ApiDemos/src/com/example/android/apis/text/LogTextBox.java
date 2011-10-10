@@ -1,4 +1,11 @@
 /*
+ * KJK_TALK APIDEMOS: Text-> LogTextBox1 : LogTextBox
+   LogTextBox1에서 LogTextBox class를 사용한다.
+   link는 import가 아닌 build system에서 하게 된다.
+   아래에서 scrolling과 TextView 속성을 default로 editable로 하기위해서
+   TextView를 재정의 하게 되었다. 
+
+
  * Copyright (C) 2007 The Android Open Source Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -47,11 +54,14 @@ public class LogTextBox extends TextView {
         super(context, attrs, defStyle);
     }
 
+    //KJK_TALK: scrolling을 하기 위해서는 반드시 overriding해서 
+    //scrolling method를 지정해야 한다.
     @Override
     protected MovementMethod getDefaultMovementMethod() {
         return ScrollingMovementMethod.getInstance();
     }
 
+    //KJK_TALK: return 값을 Editable로 변경해서 보내기 위해 overriding하였다. 
     @Override
     public Editable getText() {
         return (Editable) super.getText();

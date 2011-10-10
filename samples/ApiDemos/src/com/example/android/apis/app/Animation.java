@@ -1,4 +1,9 @@
 /*
+ * KJK_TALK APIDEMOS: App -> Animation -> Animation.java
+ * Activity 전환간에 Animation을 제공 하기위한 기법을 보여준다. 
+ * 이때 Animation은 없어지는 Activity에 대한 Ani와 새로 실행되는 Activity에 대한 Ani 2가지로 나눠지며,
+ * Ani는 Android에서 default로 정의된 ani를 불러와서 사용하게 된다.
+
  * Copyright (C) 2009 The Android Open Source Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -57,6 +62,8 @@ public class Animation extends Activity {
             // activity on top.  Note that we need to also supply an animation
             // (here just doing nothing for the same amount of time) for the
             // old activity to prevent it from going away too soon.
+            // KJK_TALK: Animation을 설정하는 부분 method(종료 ani, 시작 ani)
+            // fade.xml, hold.xml에 animation에 대한 동작이 기술되어 있다.
             overridePendingTransition(R.anim.fade, R.anim.hold);
         }
     };

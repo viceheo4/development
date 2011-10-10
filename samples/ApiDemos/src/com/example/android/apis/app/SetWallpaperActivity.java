@@ -1,4 +1,8 @@
 /*
+ * KJK_TALK APIDEMOS: App-> Activity-> Set Wallpaper->SetWallpaperActivity.java
+ * Wallpaper 현재 Wallpaper를 얻어와 color를 변경하고, 다시 wallpaper로 설정하는 demo
+
+
  * Copyright (C) 2009 The Android Open Source Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -57,9 +61,12 @@ public class SetWallpaperActivity extends Activity {
         // view layout definition, which is being set here as
         // the content of our screen.
         setContentView(R.layout.wallpaper_2);
+        // Wallpaper Manager를 획득한후
         final WallpaperManager wallpaperManager = WallpaperManager.getInstance(this);
+        // 현재 Wallpaper를 얻어온다.
         final Drawable wallpaperDrawable = wallpaperManager.getDrawable();
         final ImageView imageView = (ImageView) findViewById(R.id.imageview);
+        // 현재 imageView가 cache로 들어가서 빠르게 됨.
         imageView.setDrawingCacheEnabled(true);
         imageView.setImageDrawable(wallpaperDrawable);
 
@@ -67,8 +74,8 @@ public class SetWallpaperActivity extends Activity {
         randomize.setOnClickListener(new OnClickListener() {
             public void onClick(View view) {
                 int mColor = (int) Math.floor(Math.random() * mColors.length);
-                wallpaperDrawable.setColorFilter(mColors[mColor], PorterDuff.Mode.MULTIPLY);
-                imageView.setImageDrawable(wallpaperDrawable);
+                wallpaperDrawable.setColorFilter(mColors[mColor], PorterDuff.Mode.MULTIPLY); // 현재 image에 color를 적용하고
+                imageView.setImageDrawable(wallpaperDrawable); //color filter가 적용된 image를 imageview에  재설정
                 imageView.invalidate();
             }
         });
@@ -77,6 +84,7 @@ public class SetWallpaperActivity extends Activity {
         setWallpaper.setOnClickListener(new OnClickListener() {
             public void onClick(View view) {
                 try {
+                    //cache로 부터 image를 가져와 Wallpaper를 실제로 변경, 
                     wallpaperManager.setBitmap(imageView.getDrawingCache());
                     finish();
                 } catch (IOException e) {

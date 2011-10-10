@@ -1,4 +1,6 @@
 /*
+ * KJK_TALK APIDEMOS: 
+
  * Copyright (C) 2007 The Android Open Source Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -37,7 +39,12 @@ public class ApiDemosApplication extends Application {
          * This populates the default values from the preferences XML file. See
          * {@link DefaultValues} for more details.
          */
-        PreferenceManager.setDefaultValues(this, R.xml.default_values, false);
+    	//KJK_TALK: preferenece에 대한 default값을 xml에다 기록하는데,
+    	//그 default값을 가져오는 부분으로 여기서는 preference를 
+    	//사용하지 않으므로 필요없을것 같다. 
+    	//다른 activity에서 해당 preference를 사용한다면 필요하다. 이부분 확인 못함.
+    	//true이면 맨처음 초기에 한번 읽어오고, false이면 default값을 매번 읽어오게 된다.
+       PreferenceManager.setDefaultValues(this, R.xml.default_values, false);
     }
 
     @Override

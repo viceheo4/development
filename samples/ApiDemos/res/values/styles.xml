@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- Copyright (C) 2007 The Android Open Source Project
+ /* KJK_TALK APIDEMOS: ApiDemos에서 사용하는 모든 Theme를 모아놨다.
+ 여기서 base로 하는 Theme은 frameworks\base\core\res\res\values\themes.xml file로 
+ parent tag로 필요한 속성만을 overriding하여 재정의 하여 사용이 가능하다. 
+ */ 
 
      Licensed under the Apache License, Version 2.0 (the "License");
      you may not use this file except in compliance with the License.
@@ -16,6 +20,7 @@
 
 <resources>
     <!-- Base application theme is the default theme. -->
+    <!-- KJK_TALK android:Theme은 기본적으로 android default로 제공하는것으로 . -->
     <style name="Theme" parent="android:Theme">
     </style>
 
@@ -32,7 +37,7 @@
     </style>
 
     <!-- A theme for a custom dialog appearance.  Here we use an ugly
-         custom frame. -->
+         custom frame. style중 background image를 xml(filled_box.xml)로 설정하겠다고 표시, default는 img로 되어 있음-->
     <style name="Theme.CustomDialog" parent="android:style/Theme.Dialog">
         <item name="android:windowBackground">@drawable/filled_box</item>
     </style>
@@ -57,7 +62,9 @@
          background; this example completely removes the background,
          allowing the activity to decide how to composite.  Also here we
          force the translucency ourself rather than making use of the built-in
-         translucent theme. -->
+         translucent theme. 
+         KJK_TALK : android:windowIsTranslucent 설정을 여기서 한다.
+         -->
     <style name="Theme.Transparent">
         <item name="android:windowIsTranslucent">true</item>
         <item name="android:windowAnimationStyle">@android:style/Animation.Translucent</item>

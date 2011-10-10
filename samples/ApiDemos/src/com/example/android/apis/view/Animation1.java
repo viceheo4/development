@@ -39,7 +39,7 @@ public class Animation1 extends Activity implements View.OnClickListener {
 
     public void onClick(View v) {
         Animation shake = AnimationUtils.loadAnimation(this, R.anim.shake);
-        findViewById(R.id.pw).startAnimation(shake);
+        findViewById(R.id.pw).startAnimation(shake);//KJK_TALK: passwd res¸¦ Èçµé¾î¶ó.
     }
 
 }

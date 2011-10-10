@@ -1,4 +1,9 @@
 /*
+ * KJK_TALK APIDEMOS: App-> Notification-> Notifying Service Controller-> Notifying Service
+ * service에서 thread를 만들어 Notification을 바꾸는 예제 인데, 주기적으로 notification display를 
+ * 호출해 주기만 한다. notification panel에 바뀌는 image는 notification manager가 자동으로 처리해준다.
+
+
  * Copyright (C) 2007 The Android Open Source Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -51,7 +56,9 @@ public class NotifyingService extends Service {
         // Start up the thread running the service.  Note that we create a
         // separate thread because the service normally runs in the process's
         // main thread, which we don't want to block.
+        //KJK_TALK: main thread에서 ui랑 같이 돌리면 block되므로 따로 thread를 만든다 
         Thread notifyingThread = new Thread(null, mTask, "NotifyingService");
+        //여러 thread에서 access가능한 condition value를 default 값 false(lock)로 만든다.
         mCondition = new ConditionVariable(false);
         notifyingThread.start();
     }
@@ -60,7 +67,7 @@ public class NotifyingService extends Service {
     public void onDestroy() {
         // Cancel the persistent notification.
         mNM.cancel(MOOD_NOTIFICATIONS);
-        // Stop the thread from generating further notifications
+        // Stop the thread from generating further notifications, lock해제
         mCondition.open();
     }
 
@@ -69,18 +76,21 @@ public class NotifyingService extends Service {
             for (int i = 0; i < 4; ++i) {
                 showNotification(R.drawable.stat_happy,
                         R.string.status_bar_notifications_happy_message);
-                if (mCondition.block(5 * 1000)) 
+                //500ms동안 lock,이후에는 자동적으로 unlock
+                if (mCondition.block(1 * 500)) 
                     break;
                 showNotification(R.drawable.stat_neutral,
                         R.string.status_bar_notifications_ok_message);
-                if (mCondition.block(5 * 1000)) 
+                
+                if (mCondition.block(1 * 500)) 
                     break;
                 showNotification(R.drawable.stat_sad,
                         R.string.status_bar_notifications_sad_message);
-                if (mCondition.block(5 * 1000)) 
+                
+                if (mCondition.block(1 * 500)) 
                     break;
             }
-            // Done with our work...  stop the service!
+            // Done with our work...  stop the service! 스스를 멈춘다.
             NotifyingService.this.stopSelf();
         }
     };

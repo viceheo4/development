@@ -1,4 +1,8 @@
 /*
+ * KJK_TALK APIDEMOS: App-> Alarm-> Alarm Controller-> RepeatingAlarm.java
+ * Alarm Manager service에서 주기적으로 broadcast msg를 날린다.
+
+
  * Copyright (C) 2007 The Android Open Source Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");

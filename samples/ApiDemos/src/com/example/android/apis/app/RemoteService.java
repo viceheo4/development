@@ -1,4 +1,29 @@
 /*
+  * KJK_TALK APIDEMOS: App-> Service-> Remote Service Controller
+ * 다른 process의 main thread내에서 service를 생성하는 예제로서 
+ * 현재 process의 종료와 상관없이 동작된다.
+ * LocalService의 handler에서 activity로 분기하듯이 service로 분기하는 방식으로 
+ * 다른 process의 handler에게 해당 요청을 전달하게 된다.
+
+ 
+  * KJK_TALK APIDEMOS: App-> Service-> Remote Service Binding
+ * App에서 함수를 만들대 callback으로 호출되어야 하면 객체로 전달
+ * 해줘야 하므로 익명 class로 만든다. 그러나 그렇게 전달할필요가 없는 경우 
+ * 그냥 method로 만든다. 참고로 익명 class는 interface나 class 둘다 가능하다.
+ * new [interface|class](){ body}
+ * Remote Service 에서 Client를 호출할때는 IRemoteServiceCallback Proxy를 사용
+ * Remote Service Binding에서 Server를 호출할때는 IRemoteService Proxy를 사용한다.
+ 
+  
+ * KJK_TALK APIDEMOS: App-> Service-> Remote Service Controller-> RemoteService.java
+ * KJK_TALK APIDEMOS: App-> Service-> Remote Service Binding-> RemoteService.java
+   앞의 예제인 LocalService와 동일하게 시작과 동시에 status bar에 service가 시작되었음을 
+ * 알리고, 종료되면 toast를 띄워 알려주는 기능을 하게 된다 
+ * 그러나 차이점으로 AndroidManifest.xml 파일에         
+ * <service android:name=".app.RemoteService" android:process=":remote">를 기록함으로
+ * remote process의 main thread로 동작하게 된다.
+
+
  * Copyright (C) 2007 The Android Open Source Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -43,6 +68,7 @@ import android.widget.Toast;
 import com.example.android.apis.R;
 
 /**
+ * KJK_TALK: 실제 RemoteService로 새로운 process로 동작
  * This is an example of implementing an application service that runs in a
  * different process than the application.  Because it can be in another
  * process, we must use IPC to interact with it.  The
@@ -91,7 +117,8 @@ public class RemoteService extends Service {
         mCallbacks.kill();
         
         // Remove the next pending message to increment the counter, stopping
-        // the increment loop.
+        // the increment loop. 현재 msg는 다음 msg를 trigger하므로 
+        // msg Queue에서 현재 msg를 제거하면 더이상 오지 않게 된다.
         mHandler.removeMessages(REPORT_MSG);
     }
     
@@ -114,6 +141,7 @@ public class RemoteService extends Service {
      * The IRemoteInterface is defined through IDL
      */
     private final IRemoteService.Stub mBinder = new IRemoteService.Stub() {
+        //cb는 IRemoteServiceCallback$Stub$Proxy로 client에게 msg를 보내는함수
         public void registerCallback(IRemoteServiceCallback cb) {
             if (cb != null) mCallbacks.register(cb);
         }
@@ -141,6 +169,9 @@ public class RemoteService extends Service {
      * Our Handler used to execute operations on the main thread.  This is used
      * to schedule increments of our value.
      */
+    //KJK_TALK: Handler type의 익명 클래스로 handleMessage만을 overiding하였다.
+    //sendEmptyMessage에서 msg의 target을 현재 handler로 만듦으서 
+    // looper에서 default handler대신에 여기서 정의한 handler가 호출된게 된다.
     private final Handler mHandler = new Handler() {
         @Override public void handleMessage(Message msg) {
             switch (msg.what) {
@@ -163,7 +194,7 @@ public class RemoteService extends Service {
                     mCallbacks.finishBroadcast();
                     
                     // Repeat every 1 second.
-                    sendMessageDelayed(obtainMessage(REPORT_MSG), 1*1000);
+                    sendMessageDelayed(obtainMessage(REPORT_MSG), 200);
                 } break;
                 default:
                     super.handleMessage(msg);
@@ -192,12 +223,13 @@ public class RemoteService extends Service {
 
         // Send the notification.
         // We use a string id because it is a unique number.  We use it later to cancel.
-        mNM.notify(R.string.remote_service_started, notification);
+        mNM.notify(R.string.remote_service_started, notification); //KJK_TALK: notificatin을 날린다.
     }
     
     // ----------------------------------------------------------------------
     
     /**
+     * KJK_TALK: client로 remote server를 create하고 destory한다.
      * <p>Example of explicitly starting and stopping the remove service.
      * This demonstrates the implementation of a service that runs in a different
      * process than the rest of the application, which is explicitly started and stopped
@@ -207,7 +239,9 @@ public class RemoteService extends Service {
      * all together; typically this code would appear in some separate class.
      */
     public static class Controller extends Activity {
-        @Override
+    	static int count =0;
+    	
+    	@Override
         protected void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
 
@@ -222,11 +256,15 @@ public class RemoteService extends Service {
 
         private OnClickListener mStartListener = new OnClickListener() {
             public void onClick(View v) {
-                // Make sure the service is started.  It will continue running
+            	count ++;
+            	// Make sure the service is started.  It will continue running
                 // until someone calls stopService().
                 // We use an action code here, instead of explictly supplying
                 // the component name, so that other packages can replace
                 // the service.
+                //KJK_TALK: intent를 explicit하게 component name을 명시하지 않고
+                //implicit action으로 지정하엿다. 받은 녀석은 androidmanifest.xml에 기록해줘야한다.
+                //<action android:name="com.example.android.apis.app.REMOTE_SERVICE" />
                 startService(new Intent(
                         "com.example.android.apis.app.REMOTE_SERVICE"));
             }
@@ -234,6 +272,7 @@ public class RemoteService extends Service {
 
         private OnClickListener mStopListener = new OnClickListener() {
             public void onClick(View v) {
+            	count--;
                 // Cancel a previous call to startService().  Note that the
                 // service will not actually stop at this point if there are
                 // still bound clients.
@@ -246,6 +285,7 @@ public class RemoteService extends Service {
     // ----------------------------------------------------------------------
     
     /**
+     * KJK_TALK: client로 remote server와 binding할수 있는 interface를 가지고 있다.
      * Example of binding and unbinding to the remote service.
      * This demonstrates the implementation of a service which the client will
      * bind to, interacting with it through an aidl interface.</p>
@@ -288,26 +328,26 @@ public class RemoteService extends Service {
             mCallbackText.setText("Not attached.");
         }
 
-        /**
-         * Class for interacting with the main interface of the service.
-         */
+    /** KJK_TALK: 서버와 통신에 사용될 instance 를 생성한다.
+     * Class for interacting with the main interface of the service.
+     *///KJK_TALK: interface를 상속받는 익명클래스(connection을 관리)를 생성한다
         private ServiceConnection mConnection = new ServiceConnection() {
             public void onServiceConnected(ComponentName className,
-                    IBinder service) {
+                	IBinder service) { //msg.callback으로 handler에서 호출된다.
                 // This is called when the connection with the service has been
                 // established, giving us the service object we can use to
                 // interact with the service.  We are communicating with our
                 // service through an IDL interface, so get a client-side
                 // representation of that from the raw service object.
-                mService = IRemoteService.Stub.asInterface(service);
+                mService = IRemoteService.Stub.asInterface(service); //KJK_TALK: 연결된 service를 얻어온다.
                 mKillButton.setEnabled(true);
                 mCallbackText.setText("Attached.");
 
                 // We want to monitor the service for as long as we are
                 // connected to it.
-                try {
-                    mService.registerCallback(mCallback);
-                } catch (RemoteException e) {
+            	try {//KJK_TALK: 연결된 service를 통해 callback object를 등록하여 
+                	mService.registerCallback(mCallback); //차후에 server로 부터 cb이 IDL을 통해 호출되게 만든다.
+            	} catch (RemoteException e) { //IRemoteService$Stub$Proxy.registerCallback(IRemoteServiceCallback)가 호출된다.
                     // In this case the service has crashed before we could even
                     // do anything with it; we can count on soon being
                     // disconnected (and then reconnected if it can be restarted)
@@ -317,7 +357,7 @@ public class RemoteService extends Service {
                 // As part of the sample, tell the user what happened.
                 Toast.makeText(Binding.this, R.string.remote_service_connected,
                         Toast.LENGTH_SHORT).show();
-            }
+        	}//KJK_TALK: connection이 맺어지면 호출된다.
 
             public void onServiceDisconnected(ComponentName className) {
                 // This is called when the connection with the service has been
@@ -329,12 +369,12 @@ public class RemoteService extends Service {
                 // As part of the sample, tell the user what happened.
                 Toast.makeText(Binding.this, R.string.remote_service_disconnected,
                         Toast.LENGTH_SHORT).show();
-            }
+       	     }//connection이 강제로 연결해제되면 호출된다.
         };
 
         /**
          * Class for interacting with the secondary interface of the service.
-         */
+     	*///KJK_TALK: 서버와 통신에 사용될 instance를 생성한다.
         private ServiceConnection mSecondaryConnection = new ServiceConnection() {
             public void onServiceConnected(ComponentName className,
                     IBinder service) {
@@ -342,12 +382,12 @@ public class RemoteService extends Service {
                 // other interface.
                 mSecondaryService = ISecondary.Stub.asInterface(service);
                 mKillButton.setEnabled(true);
-            }
+        	}//connection이 맺어지면 호출된다.
 
             public void onServiceDisconnected(ComponentName className) {
                 mSecondaryService = null;
                 mKillButton.setEnabled(false);
-            }
+        	}//connection이 강제로 연결해제되면 호출된다.
         };
 
         private OnClickListener mBindListener = new OnClickListener() {
@@ -380,7 +420,7 @@ public class RemoteService extends Service {
                     }
                     
                     // Detach our existing connection.
-                    unbindService(mConnection);
+                	unbindService(mConnection); //정상적인 연결해제 
                     unbindService(mSecondaryConnection);
                     mKillButton.setEnabled(false);
                     mIsBound = false;
@@ -405,7 +445,7 @@ public class RemoteService extends Service {
                         // processes created by that app as shown here; packages
                         // sharing a common UID will also be able to kill each
                         // other's processes.
-                        Process.killProcess(pid);
+                    	Process.killProcess(pid); //KJK_TALK: 비정상적인 해제
                         mCallbackText.setText("Killed service process.");
                     } catch (RemoteException ex) {
                         // Recover gracefully from the process hosting the
@@ -426,7 +466,7 @@ public class RemoteService extends Service {
         /**
          * This implementation is used to receive callbacks from the remote
          * service.
-         */
+     	*/ //KJK_TALK: cb가 호출되도록 binder 객체를 생성한다.
         private IRemoteServiceCallback mCallback = new IRemoteServiceCallback.Stub() {
             /**
              * This is called by the remote service regularly to tell us about
@@ -434,9 +474,9 @@ public class RemoteService extends Service {
              * pool running in each process, so the code executing here will
              * NOT be running in our main thread like most other things -- so,
              * to update the UI, we need to use a Handler to hop over there.
-             */
-            public void valueChanged(int value) {
-                mHandler.sendMessage(mHandler.obtainMessage(BUMP_MSG, value, 0));
+        	 *///KJK_TALK: 단 이렇게 호출되는 cb는 current process의 main thread에서 호출되지 않고
+        	public void valueChanged(int value) { // binder thread에서 호출된다.그러므로 msg로 main thread로 보낸다.
+        		mHandler.sendMessage(mHandler.obtainMessage(BUMP_MSG, value, 0));
             }
         };
         

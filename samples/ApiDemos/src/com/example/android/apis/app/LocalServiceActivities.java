@@ -1,4 +1,22 @@
 /*
+* KJK_TALK APIDEMOS: App-> Service-> Local Service Controller
+ * 현재 process의 현재,즉 main thread내에서 service를 생성하는 예제로서 
+ * 현재 process가 동작하는한 생성된 service는 종료되지 않는다.
+ * 즉, activity와 다르게 back key등으로 종료할수 없다.
+ * 이때, Service는 handler에서 activity로 분기하듯이 service로 분기하는 방식으로 동작한다. 
+ 
+ * KJK_TALK APIDEMOS: App-> Service-> Local Service Binding
+ * LocalServiceController가 Service의 시작과 종료를 보여주는 예제인 반면 
+ * LocalServiceBinding은 생성된 Service와의 연결과 해제를 보여주는 예제이다 
+ * binding시 Service가 생성되지 않은 상태라면 생성후 연결하게 된다.
+ * 이렇게 연결을 하기위해서는 생성시와 달리, ServiceConnection 객체가 존재해야 한다.
+ * 
+ * 
+ * 한가지 주의할것은 Controller에서는 service 생성후 back key나가면 자신이 생성한 service가 살아있지만 (아마 stack에 쌓여있는듯),
+ * Binding에서는 생성후 back key로 나가면 생성한 service가 자동으로 종료된다. Bind의 경우 Activity가 종료되면 
+ * STOP_SERVICE가 호출되어 Binding이 끝어지게 되어 있다. 이때도 Service는 계속 살아 있게 된다. Connection만 종료됨.
+
+
  * Copyright (C) 2007 The Android Open Source Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -30,7 +48,8 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.Toast;
 
-public class LocalServiceActivities {
+public class LocalServiceActivities { 
+	//KJK_TALK: 하나의 Class로 2개의 Activity class를 묶어서 구현
     /**
      * <p>Example of explicitly starting and stopping the local service.
      * This demonstrates the implementation of a service that runs in the same
@@ -61,6 +80,7 @@ public class LocalServiceActivities {
                 // the service explicitly specifies our service component, because
                 // we want it running in our own process and don't want other
                 // applications to replace it.
+                // KJK_TALK: service를 시작할때는 startSerivce로 
                 startService(new Intent(Controller.this,
                         LocalService.class));
             }
@@ -71,6 +91,7 @@ public class LocalServiceActivities {
                 // Cancel a previous call to startService().  Note that the
                 // service will not actually stop at this point if there are
                 // still bound clients.
+                // KJK_TALK: service를 긑낼때는 stopSerivce로 
                 stopService(new Intent(Controller.this,
                         LocalService.class));
             }
@@ -94,19 +115,21 @@ public class LocalServiceActivities {
         private LocalService mBoundService;
         
         private ServiceConnection mConnection = new ServiceConnection() {
+            //KJK_TALK: 서비스가 연결되면 호출되는 callback으로 연결된 service를 전달해준다.
             public void onServiceConnected(ComponentName className, IBinder service) {
                 // This is called when the connection with the service has been
                 // established, giving us the service object we can use to
                 // interact with the service.  Because we have bound to a explicit
                 // service that we know is running in our own process, we can
                 // cast its IBinder to a concrete class and directly access it.
+                //KJK_TALK: inner class type으로 casting한후 perperty에 service를 저장해놓는다.
                 mBoundService = ((LocalService.LocalBinder)service).getService();
                 
                 // Tell the user about this for our demo.
                 Toast.makeText(Binding.this, R.string.local_service_connected,
                         Toast.LENGTH_SHORT).show();
             }
-
+            //KJK_TALK: 서비스가 비정상종료되면 호출된다. 같은 process이므로 재현불가, 
             public void onServiceDisconnected(ComponentName className) {
                 // This is called when the connection with the service has been
                 // unexpectedly disconnected -- that is, its process crashed.
@@ -123,9 +146,10 @@ public class LocalServiceActivities {
             // class name because we want a specific service implementation that
             // we know will be running in our own process (and thus won't be
             // supporting component replacement by other applications).
+            //KJK_TALK: 기존에 존재하는 서비스와 connection을 맺는다. 없으면 새로 생성후맺음
             bindService(new Intent(Binding.this, 
                     LocalService.class), mConnection, Context.BIND_AUTO_CREATE);
-            mIsBound = true;
+            mIsBound = true;//이 bindService는 SystemServer에 BIND_SERVICE_TRANSACTION을 요구한다.
         }
         
         void doUnbindService() {

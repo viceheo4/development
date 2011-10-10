@@ -1,4 +1,21 @@
 /*
+ * KJK_TALK APIDEMOS: App-> Activity-> Save & Restore State
+ * 갑자기 메로리 부족등으로 background app가 종료될대, 그 마지막 상태를 저장해놧다 
+ * 복구하는 예제
+ * onPause시 performPauseActivity에서 savedInstanceState으로 현재 상태를 저장해놧다가, onResume시 
+ * mInstrumentation.callActivityOnSaveInstanceState에 의해 onSaveInstanceState가 호출되어
+ * savedInstanceState를 저장하게 된다. 
+ * 그러면 강제로 system에 의해 종료되어도 차후 재실행시 복귀된다.
+ * 재현방법
+ * 1.ApiDemos Save & Restore 실행, 2.HOME키로 HOME으로 이동, 3.다른 app실행 message같은걸로
+ * 4. DDMS로 ApiDemos 강제로 kill, 5.다시 HOME을 눌러 HOME으로 이동, 
+ * 6. HOME longkey를 눌러 이전 실행 app중 ApiDemo를 선택
+ * 참고, 만약 4번 단계에서 Menu를 통해 실행하면 ApiDemos process위에 새로운 Save & Restore가 
+ * 생성되므로 재현되지 않는다.
+ * 참고로 이렇게 강제종료에 의해 save & Restore되는 widget은 ID를 가진 widget대상으로 실시한다.
+ * ID가 넣지 않으면 save & restore 안됨 
+ * 이경우 첫번째 두번째 edit text 모두 ID가 있므으로 복구된다 
+
  * Copyright (C) 2007 The Android Open Source Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -81,7 +98,7 @@ public class SaveRestoreState extends Activity
         ((TextView)findViewById(R.id.msg)).setText(R.string.save_restore_msg);
     }
 
-    /**
+    /** 아래 2개의 함수는 save & restore 기능과 상관이 없다.
      * Retrieve the text that is currently in the "saved" editor.
      */
     CharSequence getSavedText() {

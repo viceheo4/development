@@ -1,4 +1,9 @@
 /*
+ * KJK_TALK APIDEMOS: App-> Activity-> Custom Title
+ * title bar에 user defined xml layout을 적용하는 예제
+ * 참고로 title bar는 notification window (indicator)바로 아래 존재하는 title 영역을 말함
+ * title 영역을 변경하기 위해서는 requestWindow(feature)가 필요하며, 이때 요청할수 있는 feature로는 Window.java에 기술되어 있다.
+
  * Copyright (C) 2007 The Android Open Source Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -58,10 +63,13 @@ public class CustomTitle extends Activity {
      */
     @Override
 	protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
 
-        requestWindowFeature(Window.FEATURE_CUSTOM_TITLE);
-        setContentView(R.layout.custom_title);
+		super.onCreate(savedInstanceState);
+		//title bar에 extended 기능을  enable한다.
+		requestWindowFeature(Window.FEATURE_CUSTOM_TITLE);
+		setContentView(R.layout.custom_title);
+		//titil bar에 사용자 text값을 바꾸기 위해 id가 존재하는 사용자 layout을  적용한다.
+		//id를 알아야지 어떤게 바굴건지 알게 된다.
         getWindow().setFeatureInt(Window.FEATURE_CUSTOM_TITLE, R.layout.custom_title_1);
         
         final TextView leftText = (TextView) findViewById(R.id.left_text);

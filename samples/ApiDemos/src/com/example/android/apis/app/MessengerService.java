@@ -1,4 +1,9 @@
 /*
+ * KJK_TALK APIDEMOS: App-> Service-> Messenger Service-> MessengerServiceActivity.java
+
+ * AIDL을 사용하지 않고  Messenger Service를 이용하여 자신이 만든 Service와 통신하는 예제로
+ * Service쪽에서는 Messenger Service에 Handler를 등록하여 msg를 간단하게 처리할수 있음을 보여준다. 
+
  * Copyright (C) 2010 The Android Open Source Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -53,6 +58,7 @@ public class MessengerService extends Service {
     /** For showing and hiding our notification. */
     NotificationManager mNM;
     /** Keeps track of all current registered clients. */
+    //KJK_TALK: Messenger type의 object를 ArrayList로 만들어 놓는다.
     ArrayList<Messenger> mClients = new ArrayList<Messenger>();
     /** Holds last value set by a client. */
     int mValue = 0;
@@ -113,7 +119,7 @@ public class MessengerService extends Service {
     
     /**
      * Target we publish for clients to send messages to IncomingHandler.
-     */
+     *///KJK_TALK: Messenger Service를 통해 Handler를 등록해 놓으면, 특정한 client로 부터 msg가 왔을경우, 등록된 handler로 처리해준다. 
     final Messenger mMessenger = new Messenger(new IncomingHandler());
     
     @Override

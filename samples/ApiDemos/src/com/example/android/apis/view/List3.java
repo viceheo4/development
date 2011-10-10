@@ -1,4 +1,9 @@
 /*
+ * KJK_TALK APIDEMOS: Views-> Lists-> 3. Cursor(Phone)
+ List2.java 예제외 거의 흡사하나, phone number를 출력하며, 
+ 출력하는 layer가 2 line layer로 구성되어 있다.
+
+
  * Copyright (C) 2007 The Android Open Source Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");

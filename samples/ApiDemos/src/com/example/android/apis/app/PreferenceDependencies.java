@@ -1,4 +1,9 @@
 /*
+ * KJK_TALK APIDEMOS: App-> Preferences-> 3. Preference dependencies
+ * 1. Preferences from XML 예제와 완전히 code는 같으나 xml 파일이 다르다. 
+ * 즉, 단순히 preference가 기록된 xml을 inflate시키게 되는데, dependency가 존재하는 xml이 되겠다. 
+
+
  * Copyright (C) 2007 The Android Open Source Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");

@@ -1,4 +1,9 @@
 /*
+ * KJK_TALK APIDEMOS: App-> Activity-> ReceiveResult.java
+ 하나의 activity가 다른 하나의 activity를 실행하고 실행결과에 따른 결과값을 
+ 받는것을 보여주는 예제로 그 결과값은 resultcode와 intent로 들어오게 된다.
+
+
  * Copyright (C) 2007 The Android Open Source Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -103,6 +108,8 @@ public class ReceiveResult extends Activity {
      *                    startActivity().
      * @param resultCode From sending activity as per setResult().
      * @param data From sending activity as per setResult().
+     KJK_TALK: onActivityResult 이 함수는 startActivityForResult를 사용하여 B act를 호출한후
+     그것이 종료될때 자동으로 cb함수처럼 호출되게 된다.
      */
     @Override
 	protected void onActivityResult(int requestCode, int resultCode,
@@ -110,6 +117,8 @@ public class ReceiveResult extends Activity {
         // You can use the requestCode to select between multiple child
         // activities you may have started.  Here there is only one thing
         // we launch.
+        //여러개의 startActivityForResult를 사용할때, onActivityResult도 여러개가 오는데
+        //이때, 어떤 Act가 종료되어 오는지 구별하기 위해 GET_COED 를 사용
         if (requestCode == GET_CODE) {
 
             // We will be adding to our text.
@@ -143,8 +152,8 @@ public class ReceiveResult extends Activity {
         public void onClick(View v) {
             // Start the activity whose result we want to retrieve.  The
             // result will come back with request code GET_CODE.
-            Intent intent = new Intent(ReceiveResult.this, SendResult.class);
-            startActivityForResult(intent, GET_CODE);
+            Intent intent = new Intent(ReceiveResult.this, SendResult.class);//SendResult.class 라는 act를 launch
+            startActivityForResult(intent, GET_CODE);//startActivityForResult A가 B를 실행후 B의 실행값을 리턴받을때
         }
     };
 

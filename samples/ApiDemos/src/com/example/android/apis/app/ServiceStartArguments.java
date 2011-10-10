@@ -1,4 +1,18 @@
 /*
+ * KJK_TALK APIDEMOS: App-> Service-> Service Start Arguments Controller
+ * 이 예재는 하나의 process에 새로운 thread로 service를 구동하는 방법으로
+   START_REDELIVER_INTENT, START_NOT_STICKY, START_STICKY등으로 해당 service가
+   kill시 다시 살아날지 말지를 결정하는 보여주는 예제이다. 
+   CASE 1/2번은 같은 예제로 1/2번을 실행후 kill process를 눌렀을 경우, 살아나지 않는다. 
+   CASE 3번은 실행후 kill process를 눌렀을 경우, 살아난다.
+   
+ * 이는 kill process경우에는 START_REDELIVER_INTENT, START_NOT_STICKY, START_STICKY의 flag에 의해서
+   Activity Manager가 다시 살리게 되기 때문이다.
+ * 
+ * 아래 2 버튼은 죽이는 방법으로 
+   start failed delivery경우에는 onStart에서 죽는 경우를 simulation해주는데, 이때는  flag에 상관없이 무조건  다시 살아난다. 
+   kill button은 ddms에서 kill process와 동일한 것으로 service Flag값에 따라 다르게 살아나거나 살아나지 않게 된다.      
+
  * Copyright (C) 2007 The Android Open Source Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -50,7 +64,7 @@ import com.example.android.apis.R;
  * <p>For applications targeting Android 1.5 or beyond, you may want consider
  * using the {@link android.app.IntentService} class, which takes care of all the
  * work of creating the extra thread and dispatching commands to it.
- */
+ *///KJK_TALK: Service Class가 Activity를 감싸고 있는 구조. 
 public class ServiceStartArguments extends Service {
     private NotificationManager mNM;
     private Intent mInvokeIntent;
@@ -59,7 +73,7 @@ public class ServiceStartArguments extends Service {
     
     private final class ServiceHandler extends Handler {
         public ServiceHandler(Looper looper) {
-            super(looper);
+            super(looper);//KJK_TALK: handler를 생성하고 어떤 looper를 사용하는지 알려준다.
         }
         
         @Override
@@ -70,10 +84,11 @@ public class ServiceStartArguments extends Service {
             
             Log.i("ServiceStartArguments", "Message: " + msg + ", "
                     + arguments.getString("name"));
-        
+
+            //KJK_TALK 1/2nd 명령: 그냥 txt만을 뿌린다.
             if ((msg.arg2&Service.START_FLAG_REDELIVERY) == 0) {
                 txt = "New cmd #" + msg.arg1 + ": " + txt;
-            } else {
+            } else {//START_FLAG_REDELIVERY는 START_REDELIVER_INTENT, START_STICKY인 경우
                 txt = "Re-delivered #" + msg.arg1 + ": " + txt;
             }
             
@@ -94,7 +109,7 @@ public class ServiceStartArguments extends Service {
             hideNotification();
             
             Log.i("ServiceStartArguments", "Done with #" + msg.arg1);
-            stopSelf(msg.arg1);
+            stopSelf(msg.arg1);//스스로를 멈춘다.
         }
 
     };
@@ -114,27 +129,37 @@ public class ServiceStartArguments extends Service {
         // separate thread because the service normally runs in the process's
         // main thread, which we don't want to block.  We also make it
         // background priority so CPU-intensive work will not disrupt our UI.
+		//KJK_TALK: looper를 가진 thread를 생성한다.
         HandlerThread thread = new HandlerThread("ServiceStartArguments",
                 Process.THREAD_PRIORITY_BACKGROUND);
-        thread.start();
+        thread.start();//thread의 run함수가 호출된다. entry point
         
         mServiceLooper = thread.getLooper();
         mServiceHandler = new ServiceHandler(mServiceLooper);
     }
 
+    /* KJK_TALK: startService 로 service를 시작할때 들어오는 intent에서 parameter를 구별하기 위해
+      onStartCommand가 항상 한번 실행되게 된다. 
+      intent : service 시작시 전달된 intents
+      flags : service를 재시작할지 말지 결정하는 flag로서 START_REDELIVER_INTENT, START_NOT_STICKY, START_STICKY
+      startId : 
+    */
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         Log.i("ServiceStartArguments",
                 "Starting #" + startId + ": " + intent.getExtras());
-        Message msg = mServiceHandler.obtainMessage();
+        //KJK_TALK: free pool에서 msg를 하나 가져와 설정하고
+        Message msg = mServiceHandler.obtainMessage(); 
         msg.arg1 = startId;
         msg.arg2 = flags;
-        msg.obj = intent.getExtras();
-        mServiceHandler.sendMessage(msg);
+        msg.obj = intent.getExtras();//intent로 넘어온 arguement를 읽어와서 
+        mServiceHandler.sendMessage(msg); //msg queue에 넣어준다.
         Log.i("ServiceStartArguments", "Sending: " + msg);
         
         // For the start fail button, we will simulate the process dying
         // for some reason in onStartCommand().
+
+        //그러면 되살아 나지 않는다. 
         if (intent.getBooleanExtra("fail", false)) {
             // Don't do this if we are in a retry... the system will
             // eventually give up if we keep crashing.
@@ -150,6 +175,8 @@ public class ServiceStartArguments extends Service {
         // however, here we will select between these two, so you can see
         // how they impact the behavior.  Try killing the process while it
         // is in the middle of executing the different commands.
+        // KJK_TALK: 1/2번 경우에는 START_NOT_STICKY 되살리지 않는다, 3번 경우는 START_REDELIVER_INTENT으로 되살린다.
+        // getBooleanExtra 함수는 기존값이 있으면 그값을 없으면 default(여기서는 false) 값을 리턴 
         return intent.getBooleanExtra("redeliver", false)
                 ? START_REDELIVER_INTENT : START_NOT_STICKY;
     }
@@ -264,7 +291,8 @@ public class ServiceStartArguments extends Service {
             public void onClick(View v) {
                 // This is to simulate the service being killed while it is
                 // running in the background.
-                Process.killProcess(Process.myPid());
+                //KJK_TALK: 현재 process를 죽이나, ApiDemos 실행시 재실행하도록 등록되어 있어 다시 실행됨
+                Process.killProcess(Process.myPid()); 
             }
         };
     }

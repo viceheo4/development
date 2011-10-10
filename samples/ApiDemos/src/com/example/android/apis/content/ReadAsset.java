@@ -1,4 +1,9 @@
 /*
+ * KJK_TALK APIDEMOS: App-> Content->Assets->Read Asset
+ * 일반 file을 읽는 방법을 보여준다. 로딩시는 ASCII파일으므로 
+ * UNI-code, UTF-16형식으로 변경하여 사용한다.
+
+
  * Copyright (C) 2007 The Android Open Source Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -40,14 +45,15 @@ public class ReadAsset extends Activity
 
         // See assets/res/any/layout/styled_text.xml for this
         // view layout definition.
-        setContentView(R.layout.read_asset);
+        setContentView(R.layout.read_asset); //빈 화면을 읽는다.
 
         // Programmatically load text from an asset and place it into the
         // text view.  Note that the text we are loading is ASCII, so we
         // need to convert it to UTF-16.
         try {
-            InputStream is = getAssets().open("read_asset.txt");
-            
+            InputStream is = getAssets().open("read_asset.txt"); //KJK_TALK: ascii file, 득 txt파일을 읽는다.
+            //KJK_TALK: 이제 input stream으로 읽어들였으므로 1byte가 2byte가 되었다.
+            //즉 기존 file이 2GB라면 4GB가 된다. 
             // We guarantee that the available method returns the total
             // size of the asset...  of course, this does mean that a single
             // asset can't be more than 2 gigs.
@@ -58,12 +64,12 @@ public class ReadAsset extends Activity
             is.read(buffer);
             is.close();
             
-            // Convert the buffer into a string.
+            // Convert the buffer into a string. //KJK_TALK: String의 생성자로 txt.file txt을 String으로 만든다.
             String text = new String(buffer);
             
             // Finally stick the string into the text view.
             TextView tv = (TextView)findViewById(R.id.text);
-            tv.setText(text);
+            tv.setText(text); //만든 text 출력
         } catch (IOException e) {
             // Should never happen!
             throw new RuntimeException(e);

@@ -1,4 +1,10 @@
 /*
+ * KJK_TALK APIDEMOS: App-> Activity-> TranslucentBlur
+ * AndroidManifest.xml파일에서 @style/Theme.Transparent를 이용하여 
+ * 현재 Foreground를 투명하게 하고, getWindow().setFlags(FLAG_BLUR_BEHIND)로
+ * 이전 화면을 blur하게 하여 겹쳐지는 효과를 만듦.
+
+
  * Copyright (C) 2007 The Android Open Source Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -44,6 +50,7 @@ public class TranslucentBlurActivity extends Activity {
         super.onCreate(icicle);
 
         // Have the system blur any windows behind this one.
+        // 실제로 뒷배경을 blur 시키는 method, 참고로 FLAG_DIM_BEHIND로 dimming시킬수도 잇다.
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_BLUR_BEHIND,
                 WindowManager.LayoutParams.FLAG_BLUR_BEHIND);
         

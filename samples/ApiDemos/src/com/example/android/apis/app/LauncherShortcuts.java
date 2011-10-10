@@ -1,4 +1,14 @@
 /*
+ * KJK_TALK APIDEMOS: App-> Launcher Shortcuts
+ * AndroidManifest.xml에 <action android:name="android.intent.action.CREATE_SHORTCUT" />가
+ * 기록되어 있기때문에 longclick시 ApiDemos Shortcut이 보여지게 된다.
+ * 1)이때 이것을 click하여 해당 act를 바로 launch할수 있으며, 
+ * 2)그냥 ApiDemos menu에서 선택하여 실행시킬수도 있다. 
+ * 각 경우에 대해서 어떻게 실행되었는지 intent 정보를 display해줌으로써 
+ * 사용자가 알수있게 해준다 
+ * 1의 경우에는 implicit ACTION인 act로 android.intent.action.MAIN이 들어오고 
+ * 2의 경우에는 explict ACTION으로 실제 class명이 들어온다. 
+
  * Copyright (C) 2008 The Android Open Source Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -58,12 +68,11 @@ public class LauncherShortcuts extends Activity {
         super.onCreate(icicle);
 
         // Resolve the intent
-
-        final Intent intent = getIntent();
-        final String action = intent.getAction();
+        final Intent intent = getIntent();//현재 act를 launch한 intent를 획득한다.
+        final String action = intent.getAction(); 
 
         // If the intent is a request to create a shortcut, we'll do that and exit
-
+        // home에서 shortcut으로 현재 화면으로 이동했다면,그러므로 처음실행시는 false
         if (Intent.ACTION_CREATE_SHORTCUT.equals(action)) {
             setupShortcut();
             finish();
@@ -80,12 +89,12 @@ public class LauncherShortcuts extends Activity {
         // Provide a lightweight view of the Intent that launched us
 
         TextView intentInfo = (TextView) findViewById(R.id.txt_shortcut_intent);
-        String info = intent.toString();
-        String extra = intent.getStringExtra(EXTRA_KEY);
+        String info = intent.toString();//intent와 
+        String extra = intent.getStringExtra(EXTRA_KEY);//extra정보를 
         if (extra != null) {
             info = info + " " + extra;
         }
-        intentInfo.setText(info);
+        intentInfo.setText(info);//화면에 출력한다.
     }
 
     /**
@@ -121,12 +130,15 @@ public class LauncherShortcuts extends Activity {
         // data Uri in order to display a more specific result, or a custom action in order to 
         // launch a specific operation.
 
+        // 현재 act로 올수 있게 하는 intent를 만든다. 
         Intent shortcutIntent = new Intent(Intent.ACTION_MAIN);
         shortcutIntent.setClassName(this, this.getClass().getName());
         shortcutIntent.putExtra(EXTRA_KEY, "ApiDemos Provided This Shortcut");
 
         // Then, set up the container intent (the response to the caller)
 
+        //KJK_TALK: HOME에서 long click으로 shortcut을 선택할때, 보여주는 shortcut을 
+        // 등록가능케하는 intents, 참고로 여기에 파라미터로 shortcutIntent를 넣어준다.
         Intent intent = new Intent();
         intent.putExtra(Intent.EXTRA_SHORTCUT_INTENT, shortcutIntent);
         intent.putExtra(Intent.EXTRA_SHORTCUT_NAME, getString(R.string.shortcut_name));
@@ -135,7 +147,7 @@ public class LauncherShortcuts extends Activity {
         intent.putExtra(Intent.EXTRA_SHORTCUT_ICON_RESOURCE, iconResource);
 
         // Now, return the result to the launcher
-
+        //KJK_TALK: Launcher에게 shortcut을 담은 intent를 전달해주는 부분. 
         setResult(RESULT_OK, intent);
     }
 }

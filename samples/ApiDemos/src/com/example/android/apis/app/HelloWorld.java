@@ -1,4 +1,8 @@
 /*
+ * KJK_TALK APIDEMOS: App-> Activity-> HelloWorld
+ 단순히 XML에 적힌 HelloWorld widget을 inflate하여 보여주는 역활을 한다.
+ TextView를 사용하엿으며, View Group은 지정되지 않앗다.
+
  * Copyright (C) 2007 The Android Open Source Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -22,6 +26,9 @@ import com.example.android.apis.R;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.util.Log;
+
+
 
 
 /**
@@ -56,11 +63,14 @@ public class HelloWorld extends Activity
 	protected void onCreate(Bundle savedInstanceState)
     {
         // Be sure to call the super class.
+		//강제로 app가 종료되었을때, 마지막 순간을 저장해놨다가 다시 그 app를 시작하면 이전 상태로 loading해주기 위해 현재 상태를 저장한다. 
         super.onCreate(savedInstanceState);
 
         // See assets/res/any/layout/hello_world.xml for this
         // view layout definition, which is being set here as
         // the content of our screen.
+        // KJK_QUESTION : hello_world는 integer인데, 실제로 integer를 어떻게 mapping시키지?
         setContentView(R.layout.hello_world);
+        Log.v(this.getClass().toString(), this.toString());
     }
 }

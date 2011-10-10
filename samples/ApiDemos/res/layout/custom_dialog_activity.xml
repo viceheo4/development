@@ -18,6 +18,7 @@
      See corresponding Java code com.android.sdk.app.CustomDialogActivity.java. -->
 
 <!-- This screen consists of a single text field that displays some text. -->
+<!-- KJK_TALK: View Group이 없음에 유의하라. 바로 TextView가 나왔다.즉 parent가 없다.-->
 <TextView xmlns:android="http://schemas.android.com/apk/res/android" android:id="@+id/text"
     android:layout_width="match_parent" android:layout_height="match_parent"
     android:gravity="center_vertical|center_horizontal"

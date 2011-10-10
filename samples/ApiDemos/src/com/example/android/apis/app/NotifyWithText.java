@@ -1,4 +1,10 @@
 /*
+ * KJK_TALK APIDEMOS: App-> Notification-> NotifyWithText
+ Toast 사용법을 보여주는 예제
+ Toast.makeText(NotifyWithText.this, R.string.short_notification_text,Toast.LENGTH_SHORT).show();
+ static method인 makeText는 toast를 생성(new)하고, show로 display해준다.입력하는 txt는 ID혹은 CharSequence 
+ 모두 가능하다.
+
  * Copyright (C) 2007 The Android Open Source Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");

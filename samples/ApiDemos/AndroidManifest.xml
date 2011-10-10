@@ -55,6 +55,7 @@
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.LAUNCHER" />
+                <!--KJK_TALK: DEFAULT, LAUNCHERë¡? ?œê²ƒì´ default entry activity-->
             </intent-filter>
         </activity>
 
@@ -63,6 +64,13 @@
         <!-- ************************************* -->
 
         <!-- Activity Samples -->
+        <activity android:name=".app.MyTest" android:label="App/Aa.Activity/A00---Hello MyTest">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.SAMPLE_CODE" />
+            </intent-filter>
+        </activity>
+
 
         <activity android:name=".app.HelloWorld" android:label="@string/activity_hello_world">
             <intent-filter>

@@ -20,15 +20,15 @@
 
     <PreferenceCategory
             android:title="@string/example_preference_dependency">
-            
+        <!--KJK_TALK: check box를 가진 text view를 보여준다.-->                
         <CheckBoxPreference
                 android:key="wifi"
                 android:title="@string/title_wifi" />
-            
+        <!-- 그냥 textview를 보여주고, select되면 edittext box를 띄운다.-->    
         <EditTextPreference
                 android:layout="?android:attr/preferenceLayoutChild"
                 android:title="@string/title_wifi_settings"
-                android:dependency="wifi" />
+                android:dependency="wifi" /><!--위의 wifi가 enable되어야 선택이 가능해진다. -->
             
     </PreferenceCategory>
                 

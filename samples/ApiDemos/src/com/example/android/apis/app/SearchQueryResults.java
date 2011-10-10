@@ -1,4 +1,11 @@
 /*
+ * KJK_TALK APIDEMOS: App-> Search-> Query Search Results
+ * Invoke Search로 검색한 결과로 보이거나, 직접 menu에서 Query Search Results를 실행시켜 
+ * 해당 activity를 띄울수 있다 
+ * 이 예제는 search한 query문자열과 additional 정보를 어떻게 다른 act에서 획득할수 있는지 
+ * 보여주는 예제 이다. KJK_TALK: NEEDTOSTUDY
+
+
  * Copyright (C) 2008 The Android Open Source Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -52,10 +59,10 @@ public class SearchQueryResults extends Activity
         // get and process search query here
         final Intent queryIntent = getIntent();
         final String queryAction = queryIntent.getAction();
-        if (Intent.ACTION_SEARCH.equals(queryAction)) {
+        if (Intent.ACTION_SEARCH.equals(queryAction)) { //KJK_TALK: search bar 결과로 띄운경우 
             doSearchQuery(queryIntent, "onCreate()");
         }
-        else {
+        else {//KJK_TALK: 그냥 menu로 띄운 경우 
             mDeliveredByText.setText("onCreate(), but no ACTION_SEARCH intent");
         }
     }
@@ -66,7 +73,7 @@ public class SearchQueryResults extends Activity
      * This is where we check the incoming intent for a query string.
      * 
      * @param newIntent The intent used to restart this activity
-     */
+     *///KJK_TALK: 새로운 intent가 올때 호출된다.
     @Override
     public void onNewIntent(final Intent newIntent) {
         super.onNewIntent(newIntent);
@@ -91,6 +98,7 @@ public class SearchQueryResults extends Activity
     private void doSearchQuery(final Intent queryIntent, final String entryPoint) {
         
         // The search query is provided as an "extra" string in the query intent
+        // KJK_TALK: 현재 QueryString을 얻는 방법
         final String queryString = queryIntent.getStringExtra(SearchManager.QUERY);
         mQueryText.setText(queryString);
         
@@ -103,6 +111,7 @@ public class SearchQueryResults extends Activity
         // you will receive it as an "extra" bundle in the query intent. 
         // The bundle can contain any number of elements, using any number of keys;
         // For this Api Demo we're just using a single string, stored using "demo key".
+        // KJK_TALK: 현재 QueryString과 함께 들어온 context정보를 얻는방법 
         final Bundle appData = queryIntent.getBundleExtra(SearchManager.APP_DATA);
         if (appData == null) {
             mAppDataText.setText("<no app data bundle>");

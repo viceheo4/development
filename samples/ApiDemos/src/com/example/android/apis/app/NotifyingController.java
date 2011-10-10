@@ -1,4 +1,9 @@
 /*
+ * KJK_TALK APIDEMOS: App-> Notification->Notifying Service Controller
+status bar의 notification을 service를 이용하여 주기적으로 바꾸는 서비스
+이렇게 바꾸면 notification pannel에서도 자동으로 변경되는것을 확인할수 있다.
+
+
  * Copyright (C) 2007 The Android Open Source Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -46,6 +51,7 @@ public class NotifyingController extends Activity {
 
     private OnClickListener mStartListener = new OnClickListener() {
         public void onClick(View v) {
+            //startService는 Service를 invoke시키는 intent를 param으로 받는다.
             startService(new Intent(NotifyingController.this, 
                     NotifyingService.class));
         }

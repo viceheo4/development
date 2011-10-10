@@ -1,4 +1,19 @@
 /*
+ * KJK_TALK APIDEMOS: App-> Diaglog
+ * 다양한 Alert Dialog (Popup)의 종류를 생성해본다.
+    Title OK Cancel
+    Title TextView Ok Someting Cancel
+    Title List
+    Title ProgressBar OK Cancel
+    Title List RadioSelect OK Cancel            
+    Title List CheckBox OK Cancel                                
+    Title List CheckBox
+    Title TextView TextEdit TextView TextEdit OK Cancel (User Defined)
+
+ * 참고로 AlertDialog의 형제로는 CharacterPickerDialog 가 잇으며
+ * 자식으로는  DatePickerDialog, ProgressDialog, TimePickerDialog 가 존재한다.
+ * 여기서는 AlertDialog와 ProgressDialog의 이용법을 보여준다.
+
  * Copyright (C) 2007 The Android Open Source Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -56,6 +71,7 @@ App/Dialog/Alert Dialog
  * </table> 
  */
 public class AlertDialogSamples extends Activity {
+	public static boolean KJK_DEBUG = true;//false : ori vs true : new
     private static final int DIALOG_YES_NO_MESSAGE = 1;
     private static final int DIALOG_YES_NO_LONG_MESSAGE = 2;
     private static final int DIALOG_LIST = 3;
@@ -74,7 +90,30 @@ public class AlertDialogSamples extends Activity {
     @Override
     protected Dialog onCreateDialog(int id) {
         switch (id) {
-        case DIALOG_YES_NO_MESSAGE:
+		//Titie YES NO 
+		case DIALOG_YES_NO_MESSAGE:
+        // KJK_TALK: 생성후 바로 method call을 하나로 --> new 생성자().method(); 아래와 같이 첫번재 case는 6단계로 변경될수 잇다.
+		// KJK_TALK PATTERN: 이경우 new와 각각의 method들은 모두 같은 type(builder)를 반환해야 한다.
+		    if (KJK_DEBUG) {//현재 act에 AlertDialog에 사용할 builder를 만들고
+                AlertDialog.Builder rBuilder=new AlertDialog.Builder(AlertDialogSamples.this);
+                rBuilder.setIcon(R.drawable.alert_dialog_icon); //icon을 설정하고
+                rBuilder.setTitle(R.string.alert_dialog_two_buttons_title);//title도 설정하고
+                rBuilder.setPositiveButton
+                    (R.string.alert_dialog_ok,
+                        new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog,int whichButton) {}
+                            }//default button에 "OK" 문자열과 Listener(CB)를 등록한다.
+                    );
+                rBuilder.setNegativeButton
+                    (R.string.alert_dialog_cancel,
+                            new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog,
+                                        int whichButton) {  }
+                            }//default button에 "NO" 문자열과 Listener(CB)를 등록한다.
+                    );
+                return rBuilder.create();//위에서 설정한 builder로 제공된 arg를 받아 Dialog를 만든다.
+
+            }else{
             return new AlertDialog.Builder(AlertDialogSamples.this)
                 .setIcon(R.drawable.alert_dialog_icon)
                 .setTitle(R.string.alert_dialog_two_buttons_title)
@@ -91,6 +130,8 @@ public class AlertDialogSamples extends Activity {
                     }
                 })
                 .create();
+            }
+        //Titie Msg YES Something NO 
         case DIALOG_YES_NO_LONG_MESSAGE:
             return new AlertDialog.Builder(AlertDialogSamples.this)
                 .setIcon(R.drawable.alert_dialog_icon)
@@ -115,12 +156,13 @@ public class AlertDialogSamples extends Activity {
                     }
                 })
                 .create();
+        //Title List
         case DIALOG_LIST:
             return new AlertDialog.Builder(AlertDialogSamples.this)
                 .setTitle(R.string.select_dialog)
                 .setItems(R.array.select_dialog_items, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
-
+                    //List Dialog를 click시 해당 item 획득 
                         /* User clicked so do some stuff */
                         String[] items = getResources().getStringArray(R.array.select_dialog_items);
                         new AlertDialog.Builder(AlertDialogSamples.this)
@@ -150,6 +192,7 @@ public class AlertDialogSamples extends Activity {
                 }
             });
             return mProgressDialog;
+        //Title List RadioSelect OK Cancel            
         case DIALOG_SINGLE_CHOICE:
             return new AlertDialog.Builder(AlertDialogSamples.this)
                 .setIcon(R.drawable.alert_dialog_icon)
@@ -173,7 +216,10 @@ public class AlertDialogSamples extends Activity {
                     }
                 })
                .create();
-        case DIALOG_MULTIPLE_CHOICE:
+        //Title List CheckBox OK Cancel  
+        //참고로 multichoice는 checkbox 뿐만 아니라 radio button도 가능하다. 
+        //즉, property로 설정이 가능하다.
+		case DIALOG_MULTIPLE_CHOICE:
             return new AlertDialog.Builder(AlertDialogSamples.this)
                 .setIcon(R.drawable.ic_popup_reminder)
                 .setTitle(R.string.alert_dialog_multi_choice)
@@ -201,6 +247,8 @@ public class AlertDialogSamples extends Activity {
                     }
                 })
                .create();
+			   //Title TextView TextEdit OK Cancel
+        //KJK_TALK: User Defined Popup이 가능하다.
             case DIALOG_MULTIPLE_CHOICE_CURSOR:
                 String[] projection = new String[] {
                         ContactsContract.Contacts._ID,
@@ -225,13 +273,17 @@ public class AlertDialogSamples extends Activity {
                             })
                    .create();
         case DIALOG_TEXT_ENTRY:
-            // This example shows how to add a custom layout to an AlertDialog
-            LayoutInflater factory = LayoutInflater.from(this);
+			// This example shows how to add a custom layout to an AlertDialog
+			// 현재 view에 매달린 LayoutInflater를 가져온다.
+			LayoutInflater factory = LayoutInflater.from(this);
+            // 가져온 LayoutInflater로 XML을 parsing하고 그 결과를 view로 가져온다.
             final View textEntryView = factory.inflate(R.layout.alert_dialog_text_entry, null);
+            // comtomized ui를 가져오고, 나머지는 alert dialog를 그대로 이용.
             return new AlertDialog.Builder(AlertDialogSamples.this)
                 .setIcon(R.drawable.alert_dialog_icon)
+					// 가져온 view를 현재 dialog에 입히고
                 .setTitle(R.string.alert_dialog_text_entry)
-                .setView(textEntryView)
+                .setView(textEntryView)// button추가 및 설정
                 .setPositiveButton(R.string.alert_dialog_ok, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int whichButton) {
     
@@ -259,7 +311,7 @@ public class AlertDialogSamples extends Activity {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.alert_dialog);
-                
+		// 해당 button을 누르면 해당 showDialog를 호출하고 그러면 onCreateDialog가 발생하도록 되어 잇다.
         /* Display a text message with yes/no buttons and handle each message as well as the cancel action */
         Button twoButtonsTitle = (Button) findViewById(R.id.two_buttons);
         twoButtonsTitle.setOnClickListener(new OnClickListener() {
@@ -290,10 +342,16 @@ public class AlertDialogSamples extends Activity {
         progressButton.setOnClickListener(new OnClickListener() {
             public void onClick(View v) {
                 showDialog(DIALOG_PROGRESS);
+				mProgressDialog.setProgress(0);// progressDialog경우, 초기값 설정
+				if (KJK_DEBUG) {
+					mProgressHandler.sendMessage(mProgressHandler
+							.obtainMessage(0, 1, 0));
+				} else {
                 mProgress = 0;
                 mProgressDialog.setProgress(0);
                 mProgressHandler.sendEmptyMessage(0);
             }
+			}
         });
         
         /* Display a radio button group */
@@ -332,14 +390,27 @@ public class AlertDialogSamples extends Activity {
             @Override
             public void handleMessage(Message msg) {
                 super.handleMessage(msg);
-                if (mProgress >= MAX_PROGRESS) {
-                    mProgressDialog.dismiss();
-                } else {
-                    mProgress++;
-                    mProgressDialog.incrementProgressBy(1);
-                    mProgressHandler.sendEmptyMessageDelayed(0, 100);
-                }
-            }
-        };
-    }
+				if (KJK_DEBUG) {
+					if (msg.arg1 >= MAX_PROGRESS)
+						mProgressDialog.dismiss(); // progressDialog 없애기
+					else {
+						mProgressDialog.incrementProgressBy(1);// 하나 증가시키고
+						// 다음증가를 위해 100 milesec이후에 0을 send
+						mProgressHandler.sendEmptyMessageDelayed(msg.arg1++,
+								100);
+					}
+				} else {
+					if (mProgress >= MAX_PROGRESS)
+						mProgressDialog.dismiss(); // progressDialog 없애기
+					else {
+						mProgress++;
+						mProgressDialog.incrementProgressBy(1);// 하나 증가시키고
+						// 다음증가를 위해 100 milesec이후에 0을 send
+						mProgressHandler.sendEmptyMessageDelayed(0, 100);
+					}
+
+				}
+			}
+		};
+	}
 }
