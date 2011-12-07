@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- Copyright (C) 2007 The Android Open Source Project
- * KJK_TALK APIDEMOS: AndroidManifest.xml
+     KJK_TALK APIDEMOS: AndroidManifest.xml
      Licensed under the Apache License, Version 2.0 (the "License");
      you may not use this file except in compliance with the License.
      You may obtain a copy of the License at
@@ -19,6 +19,7 @@
      supplies a unique name for the application.  When writing your
      own application, the package name must be changed from "com.example.*"
      to come from a domain that you own or have control over. -->
+     
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.android.apis">
 

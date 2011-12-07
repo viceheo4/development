@@ -143,7 +143,7 @@ public class RemoteService extends Service {
      */
     private final IRemoteService.Stub mBinder = new IRemoteService.Stub() {
         //cb는 IRemoteServiceCallback$Stub$Proxy로 client에게 msg를 보내는함수
-        public void registerCallback(_IRemoteServiceCallback cb) {
+        public void registerCallback(IRemoteServiceCallback cb) {
             //RemoteCallbackList.register()호출하여 main thread구동시 cb가 
             //호출될수 잇도록 cb를 등록한다.
             if (cb != null) mCallbacks.register(cb);

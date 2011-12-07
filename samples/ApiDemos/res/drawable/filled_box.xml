@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-/* KJK_TALK APIDEMOS: style중 CustomDialog에서 background image를 xml(filled_box.xml)로 설정하겠다고 표시
+KJK_TALK APIDEMOS: style중 CustomDialog에서 background image를 xml(filled_box.xml)로 설정하겠다고 표시
 ** Copyright 2007, The Android Open Source Project
 **
 ** Licensed under the Apache License, Version 2.0 (the "License"); 
