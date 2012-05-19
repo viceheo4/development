@@ -30,7 +30,9 @@ public:
         m_lenExpression(""),
         m_pointerDir(POINTER_IN),
         m_nullAllowed(false),
+        m_isLarge(false),
         m_packExpression(""),
+        m_writeExpression(""),
         m_paramCheckExpression("")
 
     {
@@ -40,26 +42,33 @@ public:
         const VarType * vartype,
         const std::string & lenExpression,
         PointerDir dir,
-        const std::string &packExpression) :
+        const std::string &packExpression,
+        const std::string &writeExpression) :
         m_name(name),
         m_type(const_cast<VarType *>(vartype)),
         m_lenExpression(lenExpression),
         m_pointerDir(dir),
         m_nullAllowed(false),
+        m_isLarge(false),
         m_packExpression(packExpression),
-		m_paramCheckExpression("")	
+        m_writeExpression(writeExpression),
+	m_paramCheckExpression("")
     {
     }
 
     void init(const std::string name, const VarType * vartype,
               std::string lenExpression,
-              PointerDir dir, std::string packExpression) {
+              PointerDir dir,
+              std::string packExpression,
+              std::string writeExpression) {
         m_name = name;
         m_type = vartype;
         m_lenExpression = lenExpression;
         m_packExpression = packExpression;
+        m_writeExpression = writeExpression;
         m_pointerDir = dir;
         m_nullAllowed = false;
+        m_isLarge = false;
 
     }
 
@@ -69,14 +78,18 @@ public:
     bool isVoid() const { return ((m_type->bytes() == 0) && (!m_type->isPointer())); }
     const std::string & lenExpression() const { return m_lenExpression; }
     const std::string & packExpression() const { return(m_packExpression); }
+    const std::string & writeExpression() const { return(m_writeExpression); }
     const std::string & paramCheckExpression() const { return m_paramCheckExpression; }
     void setLenExpression(const std::string & lenExpression) { m_lenExpression = lenExpression; }
     void setPackExpression(const std::string & packExpression) { m_packExpression = packExpression; }
+    void setWriteExpression(const std::string & writeExpression) { m_writeExpression = writeExpression; }
     void setParamCheckExpression(const std::string & paramCheckExpression) { m_paramCheckExpression = paramCheckExpression; }
     void setPointerDir(PointerDir dir) { m_pointerDir = dir; }
     PointerDir pointerDir() { return m_pointerDir; }
     void setNullAllowed(bool state) { m_nullAllowed = state; }
+    void setIsLarge(bool state) { m_isLarge = state; }
     bool nullAllowed() const { return m_nullAllowed; }
+    bool isLarge() const { return m_isLarge; }
     void printType(FILE *fp) { fprintf(fp, "%s", m_type->name().c_str()); }
     void printTypeName(FILE *fp) { printType(fp); fprintf(fp, " %s", m_name.c_str()); }
 
@@ -87,7 +100,9 @@ private:
     std::string m_lenExpression; // an expression to calcualte a pointer data size
     PointerDir m_pointerDir;
     bool m_nullAllowed;
+    bool m_isLarge;
     std::string m_packExpression; // an expression to pack data into the stream
+    std::string m_writeExpression; // an expression to write data into the stream
     std::string m_paramCheckExpression; //an expression to check parameter value
 
 };

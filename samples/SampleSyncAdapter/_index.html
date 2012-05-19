@@ -2,7 +2,8 @@
 cloud-based service and synchronize its data with data stored locally in a
 content provider. The sample uses two related parts of the Android framework
 &mdash; the account manager and the synchronization manager (through a sync
-adapter).</p>
+adapter). It also demonstrates how to provide users the ability to create
+and edit synchronized contacts using a custom editor.</p>
 
 <p> The <a
 href="../../../reference/android/accounts/AccountManager.html">account
@@ -25,8 +26,12 @@ AbstractThreadedSyncAdapter</a></code> abstract class and implementing the
 <code>onPerformSync()</code> method, which gets called whenever the sync manager
 issues a sync operation for that sync adapter. </p>
 
+<p class="note"><strong>Update:</strong> This sample has been updated for Android 4.0 to
+demonstrate new features, including: syncing and viewing contact groups, handling the "invite"
+intent, and a few other improvements.</p>
+
 <p> The cloud-based service for this sample application is running at: </p>
-<p style="margin-left:2em;">http://samplesyncadapter.appspot.com/users</p>
+<p style="margin-left:2em;">http://samplesyncadapter2.appspot.com/</p>
 
 <p>When you install this sample application, a new syncable "SampleSyncAdapter"
 account will be added to your phone's account manager. You can go to "Settings |

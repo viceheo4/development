@@ -32,6 +32,7 @@ class AbstractTestSuite(object):
     self._suite = None
     self._description = ''
     self._extra_build_args = ''
+    self._is_full_make = False
 
   def GetName(self):
     return self._name
@@ -88,6 +89,13 @@ class AbstractTestSuite(object):
     self._extra_build_args = build_args
     return self
 
+  def IsFullMake(self):
+    return self._is_full_make
+
+  def SetIsFullMake(self, full_make):
+    self._is_full_make = full_make
+    return self
+
   def Run(self, options, adb):
     """Runs the test.
 
@@ -95,5 +103,40 @@ class AbstractTestSuite(object):
     Args:
       options: global command line options
       adb: asdb_interface to device under test
+    """
+    raise NotImplementedError
+
+class AbstractTestFactory(object):
+  """generic test suite factory."""
+
+  def __init__(self, test_root_path, build_path):
+    """Creates a test suite factory.
+
+    Args:
+      test_root_path: the filesystem path to the tests build directory
+      upstream_build_path: filesystem path for the directory
+      to build when running tests, relative to the source tree root.
+    """
+    self._test_root_path = test_root_path
+    self._build_path = build_path
+
+  def GetBuildPath(self):
+    return self._build_path
+
+  def GetTestsRootPath(self):
+    return self._test_root_path
+
+  def CreateTests(self, sub_tests_path=None):
+    """Creates the tests at given test_path.
+
+    Subclasses must implement this.
+
+    Args:
+      sub_tests_path: the child path of test_root_path containing the tests to
+        run. If unspecified will be set to test_root_path.
+
+    Returns:
+      an array of AbstractTestSuite, or empty AbstractTestSuite if no tests
+      were defined
     """
     raise NotImplementedError

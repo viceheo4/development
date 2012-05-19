@@ -46,8 +46,8 @@
     <uses-permission
         android:name="android.permission.WRITE_SYNC_SETTINGS" />
 
-    <uses-sdk android:minSdkVersion="5" />
-        
+    <uses-sdk android:minSdkVersion="8" android:targetSdkVersion="14"/>
+
     <application
         android:icon="@drawable/icon"
         android:label="@string/label">
@@ -77,16 +77,86 @@
                 android:name="android.provider.CONTACTS_STRUCTURE"
                 android:resource="@xml/contacts" />
         </service>
+        <!-- The view notification service -->
+        <service
+            android:name=".notifier.NotifierService"
+            android:exported="true">
+            <!--
+                No intent-filter here! This activity is only ever launched by
+                someone who explicitly knows the class name
+            -->
+        </service>
         <activity
             android:name=".authenticator.AuthenticatorActivity"
             android:label="@string/ui_activity_title"
             android:theme="@android:style/Theme.Dialog"
             android:excludeFromRecents="true"
+            android:configChanges="orientation"
             >
             <!--
                 No intent-filter here! This activity is only ever launched by
                 someone who explicitly knows the class name
             -->
+        </activity>
+
+        <activity
+            android:name=".activites.InviteContactActivity"
+            android:theme="@android:style/Theme.Dialog">
+            <!--
+                We use the INVITE intent to add a raw contact to an existing contact.
+                It always comes with a lookup URI.
+            -->
+            <intent-filter>
+                <action
+                    android:name="com.android.contacts.action.INVITE_CONTACT" />
+                <data
+                    android:mimeType="vnd.android.cursor.item/contact" />
+            </intent-filter>
+        </activity>
+
+        <activity
+            android:name=".activities.ViewGroupActivity"
+            android:theme="@android:style/Theme.Dialog">
+            <!--
+                We use the VIEW intent to view a group in our app.
+                It always comes with a lookup URI.
+            -->
+            <intent-filter>
+                <action
+                    android:name="android.intent.action.VIEW" />
+                <data
+                    android:mimeType="vnd.android.cursor.item/group" />
+            </intent-filter>
+        </activity>
+
+        <activity
+            android:name=".activities.ViewStreamItemActivity"
+            android:theme="@android:style/Theme.Dialog">
+            <!--
+                We use the VIEW intent to view a stream item in our app.
+                It always comes with a lookup URI.
+            -->
+            <intent-filter>
+                <action
+                    android:name="android.intent.action.VIEW" />
+                <data
+                    android:mimeType="vnd.android.cursor.item/stream_item" />
+            </intent-filter>
+        </activity>
+
+        <activity
+            android:name=".activities.ViewStreamItemPhotoActivity"
+            android:theme="@android:style/Theme.Dialog">
+            <!--
+                We use the VIEW intent to view a stream item photo in our app.
+                It always comes with a lookup URI.
+            -->
+            <intent-filter>
+                <action
+                    android:name="android.intent.action.VIEW" />
+                <data
+                    android:mimeType="vnd.android.cursor.item/stream_item_photo" />
+            </intent-filter>
         </activity>
     </application>
 </manifest>

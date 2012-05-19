@@ -28,7 +28,7 @@
          실제로  com.example.android.apis.app.MyPreference가 차지하는 영역을 뿌려준다.
          그후 해당영역에 click등의 event를 보낼때마다, MyPreference의.java에서 
          listener로 처리하게 된다. -->
-    <com.example.android.apis.app.MyPreference
+    <com.example.android.apis.preference.MyPreference
             android:key="my_preference"
             android:title="@string/title_my_preference"
             android:summary="@string/summary_my_preference"
@@ -39,5 +39,5 @@
             android:title="@string/title_advanced_toggle_preference"
             android:summaryOn="@string/summary_on_advanced_toggle_preference" 
             android:summaryOff="@string/summary_off_advanced_toggle_preference" />
-<!--            android:title="@string/title_advanced_toggle_preference"-->
+
 </PreferenceScreen>

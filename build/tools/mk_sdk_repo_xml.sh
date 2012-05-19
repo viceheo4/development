@@ -6,7 +6,7 @@ set -e
 
 PROG_DIR=$(dirname $0)
 
-TYPES="tool platform-tool platform sample doc add-on"
+TYPES="tool platform-tool platform sample doc add-on system-image source support"
 OSES="linux macosx windows any linux-x86 darwin"
 
 TMP_DIR=$(mktemp -d -t sdkrepo.tmp.XXXXXXXX)
@@ -45,7 +45,7 @@ SCHEMA="$1"
 shift
 
 # Get XML:NS for SDK from the schema
-XMLNS=$(sed -n '/xmlns:.*schemas.android.com\/sdk\/android\//s/.*"\(.*\)".*/\1/p' "$SCHEMA")
+XMLNS=$(sed -n '/xmlns:sdk="/s/.*"\(.*\)".*/\1/p' "$SCHEMA")
 [[ -z "$XMLNS" ]] && error "Failed to find xmlns:sdk in $SCHEMA."
 echo "## Using xmlns:sdk=$XMLNS"
 
@@ -86,12 +86,17 @@ ATTRS=(
   Platform.Version              version
   AndroidVersion.ApiLevel       api-level
   AndroidVersion.CodeName       codename
+  Platform.IncludedAbi          included-abi
   Platform.MinToolsRev          min-tools-rev
   Platform.MinPlatformToolsRev  min-platform-tools-rev
-  Extra.Path                    path
   Extra.Vendor                  vendor
+  Extra.Path                    path
+  Extra.OldPaths                old-paths
   Extra.MinApiLevel             min-api-level
   Sample.MinApiLevel            min-api-level
+  SystemImage.Abi               abi
+  Layoutlib.Api                 layoutlib/api
+  Layoutlib.Revision            layoutlib/revision
   # for addon packages
   vendor                        vendor
   name                          name
@@ -124,22 +129,36 @@ function output_attributes() {
   local OUT="$1"
   shift
   local KEY VALUE
+  local NODE LAST_NODE
 
   while [[ "$1" ]]; do
     KEY="$1"
     VALUE="${2//@/ }"
+    NODE="${KEY%%/*}"
+    KEY="${KEY##*/}"
+    [[ "$NODE" == "$KEY" ]] && NODE=""
+    if [[ "$NODE" != "$LAST_NODE" ]]; then
+        [[ "$LAST_NODE" ]] && echo "          </sdk:$LAST_NODE>" >> "$OUT"
+        LAST_NODE="$NODE"
+        [[ "$NODE"      ]] && echo "          <sdk:$NODE>" >> "$OUT"
+    fi
     echo "        <sdk:$KEY>$VALUE</sdk:$KEY>" >> "$OUT"
     shift
     shift
   done
+  if [[ "$LAST_NODE" ]]; then echo "          </sdk:$LAST_NODE>" >> "$OUT"; fi
 }
 
 while [[ -n "$1" ]]; do
   # Process archives.
-  # First we expect a type. For conveniency the type can be plural.
+  # First we expect a type. For convenience the type can be plural.
   TYPE=$(check_enum "${1%%s}" $TYPES)
   [[ -z $TYPE ]] && error "Unknown archive type '$1'."
   shift
+
+  ELEMENT="$TYPE"
+  # The element name is different for extras:
+  [[ "$TYPE" == "support" ]] && ELEMENT="extra"
 
   MAP=""
   FIRST="1"
@@ -168,13 +187,16 @@ while [[ -n "$1" ]]; do
     # - description             all
     # - revision                all
     # - version                 platform
-    # - api-level               platform sample doc add-on
-    # - codename                platform sample doc add-on
+    # - included-abi            platform
+    # - api-level               platform sample doc add-on system-image
+    # - codename                platform sample doc add-on system-image
     # - min-tools-rev           platform sample
     # - min-platform-tools-rev  tool
     # - min-api-level           extra
     # - vendor                  extra               add-on
     # - path                    extra
+    # - old-paths               extra
+    # - abi                     system-image
     #
     # We don't actually validate here.
     # Just take whatever is defined and put it in the XML.
@@ -212,7 +234,7 @@ while [[ -n "$1" ]]; do
       MAP=$(parse_attributes "$PROPS" ${ATTRS[@]})
 
       # Time to generate the XML for the package
-      echo "    <sdk:${TYPE}>" >> "$OUT"
+      echo "    <sdk:${ELEMENT}>" >> "$OUT"
       output_attributes "$OUT" $MAP
       [[ -n "$LIBS_XML" ]] && echo "$LIBS_XML" >> "$OUT"
       echo "        <sdk:archives>" >> "$OUT"
@@ -241,7 +263,7 @@ EOFA
 
     if [[ ! "$OS" ]]; then
       echo "        </sdk:archives>" >> "$OUT"
-      echo "    </sdk:${TYPE}>" >> "$OUT"
+      echo "    </sdk:${ELEMENT}>" >> "$OUT"
     fi
   done
 

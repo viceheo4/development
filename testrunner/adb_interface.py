@@ -155,6 +155,7 @@ class AdbInterface:
       return True
     elif "restarting adbd as root" in output:
       # device will disappear from adb, wait for it to come back
+      time.sleep(2)
       self.SendCommand("wait-for-device")
       return True
     else:
@@ -262,8 +263,10 @@ class AdbInterface:
     inst_command_string = self._BuildInstrumentationCommand(
         package_name, runner_name, no_window_animation=no_window_animation,
         raw_mode=raw_mode, instrumentation_args=instrumentation_args)
-    command_string = "adb %s shell %s" % (self._target_arg, inst_command_string)
-    return command_string
+    return self.PreviewShellCommand(inst_command_string)
+
+  def PreviewShellCommand(self, cmd):
+    return "adb %s shell %s" % (self._target_arg, cmd)
 
   def _BuildInstrumentationCommand(
       self, package, runner_name, no_window_animation=False, profile=False,
@@ -465,7 +468,7 @@ class AdbInterface:
     output = ""
     error = None
     if runtime_restart:
-      self.SendShellCommand("setprop ro.monkey 1", retry_count=retry_count)
+      self.SendShellCommand("setprop ro.test_harness 1", retry_count=retry_count)
       # manual rest bootcomplete flag
       self.SendShellCommand("setprop dev.bootcomplete 0",
                             retry_count=retry_count)

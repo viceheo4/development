@@ -77,7 +77,7 @@ doxygen_version = doxygen
 #   descriptions for the new headers and point to the new doxygen created html.
 pdk_headers := \
     $(pdk_legacy_hardware_dir)/AudioHardwareInterface.h \
-    $(pdk_legacy_hardware_dir)/gps.h \
+    $(pdk_hardware_dir)/gps.h \
     $(pdk_legacy_hardware_dir)/wifi.h \
     $(pdk_camera_dir)/CameraHardwareInterface.h \
     $(pdk_hardware_dir)/sensors.h \
@@ -182,7 +182,6 @@ include $(CLEAR_VARS)
 
 LOCAL_SRC_FILES := pdk-timestamp samples/samplejni/src/com/example/jniexample/JNIExample.java  
 LOCAL_MODULE_CLASS := development/pdk/pndk/samples/samplejni/src/com/example/jniexample
-LOCAL_DROIDDOC_SOURCE_PATH := $(framework_docs_LOCAL_DROIDDOC_SOURCE_PATH)
 LOCAL_DROIDDOC_HTML_DIR := ../../../$(pdk_app_eng_root)
 
 LOCAL_MODULE := online-pdk

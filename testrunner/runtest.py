@@ -35,6 +35,7 @@ import optparse
 import os
 from sets import Set
 import sys
+import time
 
 # local imports
 import adb_interface
@@ -195,18 +196,21 @@ class TestRunner(object):
     Raises:
       AbortError: If a fatal error occurred when parsing the tests.
     """
-    core_test_path = os.path.join(self._root_path, self._CORE_TEST_PATH)
     try:
       known_tests = test_defs.TestDefinitions()
-      known_tests.Parse(core_test_path)
-      # read all <android root>/vendor/*/tests/testinfo/test_defs.xml paths
-      vendor_tests_pattern = os.path.join(self._root_path,
-                                          self._VENDOR_TEST_PATH)
-      test_file_paths = glob.glob(vendor_tests_pattern)
-      for test_file_path in test_file_paths:
-        known_tests.Parse(test_file_path)
-      if os.path.isfile(self._options.user_tests_file):
-        known_tests.Parse(self._options.user_tests_file)
+      # only read tests when not in path mode
+      if not self._options.test_path:
+        core_test_path = os.path.join(self._root_path, self._CORE_TEST_PATH)
+        if os.path.isfile(core_test_path):
+          known_tests.Parse(core_test_path)
+        # read all <android root>/vendor/*/tests/testinfo/test_defs.xml paths
+        vendor_tests_pattern = os.path.join(self._root_path,
+                                            self._VENDOR_TEST_PATH)
+        test_file_paths = glob.glob(vendor_tests_pattern)
+        for test_file_path in test_file_paths:
+          known_tests.Parse(test_file_path)
+        if os.path.isfile(self._options.user_tests_file):
+          known_tests.Parse(self._options.user_tests_file)
       return known_tests
     except errors.ParseError:
       raise errors.AbortError
@@ -223,9 +227,14 @@ class TestRunner(object):
 
   def _DoBuild(self):
     logger.SilentLog("Building tests...")
+
+    tests = self._GetTestsToRun()
+    # turn off dalvik verifier if necessary
+    self._TurnOffVerifier(tests)
+    self._DoFullBuild(tests)
+
     target_set = Set()
     extra_args_set = Set()
-    tests = self._GetTestsToRun()
     for test_suite in tests:
       self._AddBuildTarget(test_suite, target_set, extra_args_set)
 
@@ -251,26 +260,12 @@ class TestRunner(object):
           logger.Log(cmd)
           run_command.RunCommand(cmd, return_output=False)
 
-      # hack to build cts dependencies
-      # TODO: remove this when build dependency support added to runtest or
-      # cts dependencies are removed
-      if self._IsCtsTests(tests):
-        # need to use make since these fail building with ONE_SHOT_MAKEFILE
-        cmd = ('make -j%s CtsTestStubs android.core.tests.runner' %
-               self._options.make_jobs)
-        logger.Log(cmd)
-        if not self._options.preview:
-          old_dir = os.getcwd()
-          os.chdir(self._root_path)
-          run_command.RunCommand(cmd, return_output=False)
-          os.chdir(old_dir)
-      # turn off dalvik verifier if necessary
-      self._TurnOffVerifier(tests)
       target_build_string = " ".join(list(target_set))
       extra_args_string = " ".join(list(extra_args_set))
+
       # mmm cannot be used from python, so perform a similar operation using
       # ONE_SHOT_MAKEFILE
-      cmd = 'ONE_SHOT_MAKEFILE="%s" make -j%s -C "%s" files %s' % (
+      cmd = 'ONE_SHOT_MAKEFILE="%s" make -j%s -C "%s" all_modules %s' % (
           target_build_string, self._options.make_jobs, self._root_path,
           extra_args_string)
       logger.Log(cmd)
@@ -286,12 +281,43 @@ class TestRunner(object):
         logger.Log("Syncing to device...")
         self._adb.Sync(runtime_restart=rebuild_libcore)
 
+  def _DoFullBuild(self, tests):
+    """If necessary, run a full 'make' command for the tests that need it."""
+    extra_args_set = Set()
+
+    # hack to build cts dependencies
+    # TODO: remove this when cts dependencies are removed
+    if self._IsCtsTests(tests):
+      # need to use make since these fail building with ONE_SHOT_MAKEFILE
+      extra_args_set.add('CtsTestStubs')
+      extra_args_set.add('android.core.tests.runner')
+    for test in tests:
+      if test.IsFullMake():
+        if test.GetExtraBuildArgs():
+          # extra args contains the args to pass to 'make'
+          extra_args_set.add(test.GetExtraBuildArgs())
+        else:
+          logger.Log("Warning: test %s needs a full build but does not specify"
+                     " extra_build_args" % test.GetName())
+
+    # check if there is actually any tests that required a full build
+    if extra_args_set:
+      cmd = ('make -j%s %s' % (self._options.make_jobs,
+                               ' '.join(list(extra_args_set))))
+      logger.Log(cmd)
+      if not self._options.preview:
+        old_dir = os.getcwd()
+        os.chdir(self._root_path)
+        run_command.RunCommand(cmd, return_output=False)
+        os.chdir(old_dir)
+
   def _AddBuildTarget(self, test_suite, target_set, extra_args_set):
-    build_dir = test_suite.GetBuildPath()
-    if self._AddBuildTargetPath(build_dir, target_set):
-      extra_args_set.add(test_suite.GetExtraBuildArgs())
-    for path in test_suite.GetBuildDependencies(self._options):
-      self._AddBuildTargetPath(path, target_set)
+    if not test_suite.IsFullMake():
+      build_dir = test_suite.GetBuildPath()
+      if self._AddBuildTargetPath(build_dir, target_set):
+        extra_args_set.add(test_suite.GetExtraBuildArgs())
+      for path in test_suite.GetBuildDependencies(self._options):
+        self._AddBuildTargetPath(path, target_set)
 
   def _AddBuildTargetPath(self, build_dir, target_set):
     if build_dir is not None:
@@ -363,8 +389,11 @@ class TestRunner(object):
           self._adb.SendShellCommand("\"echo %s >> /data/local.prop\""
                                      % self._DALVIK_VERIFIER_OFF_PROP)
           self._adb.SendCommand("reboot")
+          # wait for device to go offline
+          time.sleep(10)
           self._adb.SendCommand("wait-for-device", timeout_time=60,
                                 retry_count=3)
+          self._adb.EnableAdbRoot()
 
   def RunTests(self):
     """Main entry method - executes the tests according to command line args."""

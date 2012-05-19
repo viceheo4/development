@@ -27,6 +27,7 @@ import android.app.Activity;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
+import android.content.ComponentName;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -159,18 +160,49 @@ public class StatusBarNotifications extends Activity {
         // The PendingIntent to launch our activity if the user selects this
         // notification.  Note the use of FLAG_UPDATE_CURRENT so that if there
         // is already an active matching pending intent, we will update its
-        // extras to be the ones passed in here.
+        // extras (and other Intents in the array) to be the ones passed in here.
         // KJK_CHECK: FLAG_ACTIVITY_NEW_TASK: 새로운 task에서 해당 activity를 실행시켜라.
         // 기존에 현재 act와 비슷한 affinity가 있다면 그 task에서 실행하게 된다.
         PendingIntent contentIntent = PendingIntent.getActivity(this, 0,
-                new Intent(this, NotificationDisplay.class)
-                        .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-                        .putExtra("moodimg", moodId),
+                new Intent(this, NotificationDisplay.class).putExtra("moodimg", moodId),
                 PendingIntent.FLAG_UPDATE_CURRENT);
         return contentIntent;
     }
-
     //Status bar와 notification panel에 noti를 default방법으로 display하도록 하는 method 
+//BEGIN_INCLUDE(intent_array)
+    private PendingIntent makeDefaultIntent() {
+        // A typical convention for notifications is to launch the user deeply
+        // into an application representing the data in the notification; to
+        // accomplish this, we can build an array of intents to insert the back
+        // stack stack history above the item being displayed.
+        Intent[] intents = new Intent[4];
+
+        // First: root activity of ApiDemos.
+        // This is a convenient way to make the proper Intent to launch and
+        // reset an application's task.
+        intents[0] = Intent.makeRestartActivityTask(new ComponentName(this,
+                com.example.android.apis.ApiDemos.class));
+
+        // "App"
+        intents[1] = new Intent(this, com.example.android.apis.ApiDemos.class);
+        intents[1].putExtra("com.example.android.apis.Path", "App");
+        // "App/Notification"
+        intents[2] = new Intent(this, com.example.android.apis.ApiDemos.class);
+        intents[2].putExtra("com.example.android.apis.Path", "App/Notification");
+
+        // Now the activity to display to the user.
+        intents[3] = new Intent(this, StatusBarNotifications.class);
+
+        // The PendingIntent to launch our activity if the user selects this
+        // notification.  Note the use of FLAG_UPDATE_CURRENT so that if there
+        // is already an active matching pending intent, we will update its
+        // extras (and other Intents in the array) to be the ones passed in here.
+        PendingIntent contentIntent = PendingIntent.getActivities(this, 0,
+                intents, PendingIntent.FLAG_UPDATE_CURRENT);
+        return contentIntent;
+    }
+//END_INCLUDE(intent_array)
+
     private void setMood(int moodId, int textId, boolean showTicker) {
         // In this sample, we'll use the same text for the ticker and the expanded notification
         CharSequence text = getText(textId);
@@ -233,8 +265,7 @@ public class StatusBarNotifications extends Activity {
         
         // This is who should be launched if the user selects our notification.
         //default notification panel list와 비슷하나 click시 이전 화면으로 돌아가도록 되어 있다.
-        PendingIntent contentIntent = PendingIntent.getActivity(this, 0,
-                new Intent(this, StatusBarNotifications.class), 0);
+        PendingIntent contentIntent = makeDefaultIntent();
 
         // In this sample, we'll use the same text for the ticker and the expanded notification
         CharSequence text = getText(R.string.status_bar_notifications_happy_message);

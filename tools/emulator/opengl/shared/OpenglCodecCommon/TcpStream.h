@@ -16,35 +16,16 @@
 #ifndef __TCP_STREAM_H
 #define __TCP_STREAM_H
 
-#include <stdlib.h>
-#include "IOStream.h"
+#include "SocketStream.h"
 
-
-class TcpStream : public IOStream {
+class TcpStream : public SocketStream {
 public:
-    typedef enum { ERR_INVALID_SOCKET = -1000 } TcpStreamError;
-
     explicit TcpStream(size_t bufsize = 10000);
-    ~TcpStream();
-    int listen(unsigned short port, bool localhost_only = true);
-    TcpStream *accept();
-    int connect(const char *hostname, unsigned short port);
-
-    virtual void *allocBuffer(size_t minSize);
-    virtual int commitBuffer(size_t size);
-    virtual const unsigned char *readFully( void *buf, size_t len);
-    virtual const unsigned char *read( void *buf, size_t *inout_len);
-
-    bool valid() { return m_sock >= 0; }
-    int recv(void *buf, size_t len);
-
+    virtual int listen(unsigned short port);
+    virtual SocketStream *accept();
+    virtual int connect(unsigned short port);
+    int connect(const char* hostname, unsigned short port);
 private:
-    int writeFully(const void *buf, size_t len);
-
-private:
-    int m_sock;
-    size_t m_bufsize;
-    unsigned char *m_buf;
     TcpStream(int sock, size_t bufSize);
 };
 

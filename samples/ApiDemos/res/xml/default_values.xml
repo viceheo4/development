@@ -21,7 +21,7 @@
     <!-- KJK_TALK: default value property로 true, title_edittext_preference, default_value_list_preference로 
     설정 -->
     <CheckBoxPreference
-            android:key="default_toggle"
+            android:key="default_checkbox"
             android:defaultValue="true"
             android:title="@string/title_checkbox_preference"
             android:summary="@string/summary_checkbox_preference" />

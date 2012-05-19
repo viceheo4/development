@@ -117,6 +117,13 @@ See test_defs.xsd for more information.
     coverage_target="framework"
     continuous="true" />
 
+<test name="ex-variablespeed"
+    build_path="frameworks/ex/variablespeed/tests"
+    package="com.android.ex.variablespeed.tests"
+    coverage_target="framework"
+    continuous="true"
+    description="Framework variable speed audio tests" />
+
 <test-native name="libui"
     build_path="frameworks/base/libs/ui/tests"
     description="Framework libui unit tests." />
@@ -124,6 +131,10 @@ See test_defs.xsd for more information.
 <test-native name="libutils"
     build_path="frameworks/base/libs/utils/tests"
     description="Framework libutils unit tests." />
+
+<test-native name="libinput"
+    build_path="frameworks/base/services/input/tests"
+    description="Framework libinput unit tests." />
 
 <!--  end of framework tests -->
 
@@ -222,6 +233,13 @@ See test_defs.xsd for more information.
     build_path="cts/tests/tests/security"
     package="com.android.cts.security"
     runner="android.test.InstrumentationCtsTestRunner"
+    suite="cts" />
+
+<test name="cts-accounts"
+    build_path="cts/tests/tests/accounts"
+    package="android.accounts.cts"
+    runner="android.test.InstrumentationTestRunner"
+    coverage_target="framework"
     suite="cts" />
 
 <test name="cts-api-signature"
@@ -398,15 +416,23 @@ See test_defs.xsd for more information.
     build_path="development/samples/ApiDemos"
     package="com.example.android.apis.tests" />
 
+<test name="applicationsprov"
+    build_path="packages/providers/ApplicationsProvider"
+    package="com.android.providers.applications.tests"
+    coverage_target="ApplicationsProvider"
+    continuous="true" />
+
 <test name="browser"
     build_path="packages/apps/Browser"
     package="com.android.browser.tests"
-    coverage_target="Browser" />
+    coverage_target="Browser"
+    continuous="true" />
 
 <test name="calculator"
     build_path="packages/apps/Calculator"
     package="com.android.calculator2.tests"
-    coverage_target="Calculator" />
+    coverage_target="Calculator"
+    continuous="true" />
 
 <test name="calendar"
     build_path="packages/apps/Calendar"
@@ -440,6 +466,12 @@ See test_defs.xsd for more information.
     runner="com.android.contacts.ContactsLaunchPerformance"
     description="Launch performance for Contacts." />
 
+<test name="downloadprovider"
+    build_path="packages/providers/DownloadProvider/tests"
+    package="com.android.providers.downloads.tests"
+    coverage_target="DownloadProvider"
+    continuous="true" />
+
 <test name="downloadprovider-permission"
     build_path="packages/providers/DownloadProvider/tests/permission"
     package="com.android.providers.downloads.permission.tests"
@@ -457,6 +489,12 @@ See test_defs.xsd for more information.
     package="com.android.email.tests"
     class="com.android.email.SmallTests"
     coverage_target="Email" />
+
+<test name="exchange"
+    build_path="packages/apps/Exchange"
+    package="com.android.exchange.tests"
+    coverage_target="Exchange"
+    continuous="true" />
 
 <test name="musicplayer"
     build_path="packages/apps/Music"
@@ -480,6 +518,13 @@ See test_defs.xsd for more information.
     build_path="packages/apps/QuickSearchBox"
     package="com.android.quicksearchbox.tests"
     coverage_target="QuickSearchBox" />
+
+<test name="systemui"
+    build_path="frameworks/base/packages/SystemUI"
+    package="com.android.systemui.tests"
+    coverage_target="SystemUI"
+    continuous="true"
+    description="SystemUI tests" />
 
 <!--  native tests  -->
 
@@ -505,6 +550,12 @@ See test_defs.xsd for more information.
     description="Google test."
     extra_build_args="GTEST_TESTS=1" />
 
+<!-- Libjingle -->
+<test-native name="libjingle"
+    build_path="vendor/google/libraries/libjingle"
+    description="Libjingle."
+    full_make="true"
+    extra_build_args="LIBJINGLE_TESTS=1" />
 
 <!-- host java tests -->
 <test-host name="cts-appsecurity"

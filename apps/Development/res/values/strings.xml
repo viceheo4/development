@@ -36,6 +36,14 @@
     <string name="start_hipri">Start HiPri</string>
     <string name="stop_hipri">Stop HiPri</string>
     <string name="crash">CRASH</string>
+    <string name="add_default_route">Add Default Route</string>
+    <string name="remove_default_route">Remove Default Route</string>
+    <string name="default_request">Make a http request</string>
+    <string name="default_socket">Make a raw request</string>
+    <string name="bound_http_request">Make bound http request</string>
+    <string name="bound_socket_request">Make bound socket request</string>
+    <string name="routed_http_request">Make routed http request</string>
+    <string name="routed_socket_request">Make routed socket request</string>
 
 
         <string name="device_info_default">unknown</string>
@@ -105,6 +113,7 @@
     <string name="development_settings_debug_app_label_text">Debug App:</string>
     <string name="development_settings_show_sleep_text">Show sleep state on LED</string>
     <string name="development_settings_keep_screen_on_text">Keep screen on while plugged in</string>
+    <string name="development_settings_window_orientation_listener_log">Enable window orientation listener log</string>
 
     <string name="monkey_screen_initialActivity_text"></string>
     <string name="monkey_screen_number_of_events_label">Number of Events: </string>
@@ -163,11 +172,13 @@
     <string name="accounts_tester_process_name_header">Process Name:</string>
     <string name="accounts_tester_remove_account">Remove Account</string>
     <string name="accounts_tester_get_auth_token">Get Auth Token</string>
+    <string name="accounts_tester_get_auth_token_by_type_and_feature">Get Auth Token By Type/Feature</string>
     <string name="accounts_tester_test_has_features">Has Features</string>
     <string name="accounts_tester_invalidate_auth_token">Invalidate Token</string>
     <string name="accounts_tester_account_context_menu_title">account operations</string>
-    <string name="accounts_tester_do_get_auth_token">Ok</string>
+    <string name="accounts_tester_ok_button">Ok</string>
     <string name="accounts_tester_enter_auth_token_type">Enter the authtoken type:</string>
+    <string name="accounts_tester_enter_features">Enter the features separated by a space:</string>
     <string name="accounts_tester_update_credentials">Update Credentials</string>
     <string name="accounts_tester_confirm_credentials">Confirm Credentials</string>
     <string name="accounts_tester_clear_password">Clear Password</string>
@@ -208,4 +219,9 @@
     <string name="bad_behavior_anr_service_label">ANR starting a Service</string>
     <string name="bad_behavior_anr_system_label">System ANR (in ActivityManager)</string>
     <string name="bad_behavior_wedge_system_label">Wedge system (5 minute system ANR)</string>
+
+    <!-- MediaScannerActivity -->
+    <string name="scancard">Scan SD card</string>
+    <string name="numsongs"># of albums</string>
+    <string name="insertbutton">Insert %1s albums</string>
 </resources>

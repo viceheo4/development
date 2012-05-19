@@ -74,11 +74,13 @@ public class ApiDemos extends ListActivity {
             return myData;
 
         String[] prefixPath;
+        String prefixWithSlash = prefix;
         
         if (prefix.equals("")) {
             prefixPath = null;//맨처음 getData call시
         } else {
             prefixPath = prefix.split("/"); //현재 dir 아래에서만 list를 구성하도록 한다.
+            prefixWithSlash = prefix + "/";
         }
 
         //얻어온 activity list의 item 갯수를 세어, 현재 199개 
@@ -96,7 +98,7 @@ public class ApiDemos extends ListActivity {
                     ? labelSeq.toString()
                     : info.activityInfo.name;
             
-            if (prefix.length() == 0 || label.startsWith(prefix)) {
+            if (prefixWithSlash.length() == 0 || label.startsWith(prefixWithSlash)) {
                 //App/Activity/Hello World
                 String[] labelPath = label.split("/");
                 //App, Activity, Hello World

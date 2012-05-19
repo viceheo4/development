@@ -136,6 +136,17 @@ public class Monkey {
      */
     private boolean mRequestAppCrashBugreport = false;
 
+    /**Request the bugreport based on the mBugreportFrequency. */
+    private boolean mGetPeriodicBugreport = false;
+
+    /**
+     * Request the bugreport based on the mBugreportFrequency.
+     */
+    private boolean mRequestPeriodicBugreport = false;
+
+    /** Bugreport frequency. */
+    private long mBugreportFrequency = 10;
+
     /** Failure process name */
     private String mReportProcessName;
 
@@ -337,9 +348,8 @@ public class Monkey {
                 synchronized (Monkey.this) {
                     mAbort = true;
                 }
-                return (mKillProcessAfterError) ? -1 : 0;
             }
-            return 0;
+            return (mKillProcessAfterError) ? -1 : 1;
         }
     }
 
@@ -452,9 +462,6 @@ public class Monkey {
      * @param args The command-line arguments
      */
     public static void main(String[] args) {
-        // Set ro.monkey if it's not set yet.
-        SystemProperties.set("ro.monkey", "true");
-
         // Set the process name showing in "ps" or "top"
         Process.setArgV0("com.android.commands.monkey");
 
@@ -551,13 +558,13 @@ public class Monkey {
             mCountEvents = false;
         } else if (mScriptFileNames != null && mScriptFileNames.size() > 1) {
             if (mSetupFileName != null) {
-                mEventSource = new MonkeySourceRandomScript(mSetupFileName, 
+                mEventSource = new MonkeySourceRandomScript(mSetupFileName,
                         mScriptFileNames, mThrottle, mRandomizeThrottle, mRandom,
                         mProfileWaitTime, mDeviceSleepTime, mRandomizeScript);
                 mCount++;
             } else {
                 mEventSource = new MonkeySourceRandomScript(mScriptFileNames,
-                        mThrottle, mRandomizeThrottle, mRandom, 
+                        mThrottle, mRandomizeThrottle, mRandom,
                         mProfileWaitTime, mDeviceSleepTime, mRandomizeScript);
             }
             mEventSource.setVerbose(mVerbose);
@@ -615,11 +622,15 @@ public class Monkey {
             }
             if (mRequestAppCrashBugreport){
                 getBugreport("app_crash" + mReportProcessName + "_");
-                mRequestAnrBugreport = false;
+                mRequestAppCrashBugreport = false;
             }
             if (mRequestDumpsysMemInfo) {
                 reportDumpsysMemInfo();
                 mRequestDumpsysMemInfo = false;
+            }
+            if (mRequestPeriodicBugreport){
+                getBugreport("Bugreport_");
+                mRequestPeriodicBugreport = false;
             }
         }
 
@@ -732,6 +743,9 @@ public class Monkey {
                 } else if (opt.equals("--pct-anyevent")) {
                     int i = MonkeySourceRandom.FACTOR_ANYTHING;
                     mFactors[i] = -nextOptionLong("any events percentage");
+                } else if (opt.equals("--pct-pinchzoom")) {
+                    int i = MonkeySourceRandom.FACTOR_PINCHZOOM;
+                    mFactors[i] = -nextOptionLong("pinch zoom events percentage");
                 } else if (opt.equals("--pkg-blacklist-file")) {
                     mPkgBlacklistFile = nextOptionData();
                 } else if (opt.equals("--pkg-whitelist-file")) {
@@ -762,6 +776,9 @@ public class Monkey {
                     mScriptLog = true;
                 } else if (opt.equals("--bugreport")) {
                     mRequestBugreport = true;
+                } else if (opt.equals("--periodic-bugreport")){
+                    mGetPeriodicBugreport = true;
+                    mBugreportFrequency = nextOptionLong("Number of iterations");
                 } else if (opt.equals("-h")) {
                     showUsage();
                     return false;
@@ -861,18 +878,6 @@ public class Monkey {
      * @return Returns true if ready to rock.
      */
     private boolean checkInternalConfiguration() {
-        // Check KEYCODE name array, make sure it's up to date.
-
-        String lastKeyName = null;
-        try {
-            lastKeyName = MonkeySourceRandom.getLastKeyName();
-        } catch (RuntimeException e) {
-        }
-        if (!"TAG_LAST_KEYCODE".equals(lastKeyName)) {
-            System.err.println("** Error: Key names array malformed (internal error).");
-            return false;
-        }
-
         return true;
     }
 
@@ -1003,7 +1008,11 @@ public class Monkey {
                 }
                 if (mRequestAppCrashBugreport){
                     getBugreport("app_crash" + mReportProcessName + "_");
-                    mRequestAnrBugreport = false;
+                    mRequestAppCrashBugreport = false;
+                }
+                if (mRequestPeriodicBugreport){
+                    getBugreport("Bugreport_");
+                    mRequestPeriodicBugreport = false;
                 }
                 if (mRequestDumpsysMemInfo) {
                     mRequestDumpsysMemInfo = false;
@@ -1094,6 +1103,12 @@ public class Monkey {
                 if (!mCountEvents) {
                     cycleCounter++;
                     writeScriptLog(cycleCounter);
+                    //Capture the bugreport after n iteration
+                    if (mGetPeriodicBugreport) {
+                        if ((cycleCounter % mBugreportFrequency) == 0) {
+                            mRequestPeriodicBugreport = true;
+                        }
+                    }
                 } else {
                     // Event Source has signaled that we have no more events to process
                     break;
@@ -1258,7 +1273,7 @@ public class Monkey {
         usage.append("              [--pct-trackball PERCENT] [--pct-syskeys PERCENT]\n");
         usage.append("              [--pct-nav PERCENT] [--pct-majornav PERCENT]\n");
         usage.append("              [--pct-appswitch PERCENT] [--pct-flip PERCENT]\n");
-        usage.append("              [--pct-anyevent PERCENT]\n");
+        usage.append("              [--pct-anyevent PERCENT] [--pct-pinchzoom PERCENT]\n");
         usage.append("              [--pkg-blacklist-file PACKAGE_BLACKLIST_FILE]\n");
         usage.append("              [--pkg-whitelist-file PACKAGE_WHITELIST_FILE]\n");
         usage.append("              [--wait-dbg] [--dbg-no-events]\n");
@@ -1271,6 +1286,7 @@ public class Monkey {
         usage.append("              [--randomize-script]\n");
         usage.append("              [--script-log]\n");
         usage.append("              [--bugreport]\n");
+        usage.append("              [--periodic-bugreport]\n");
         usage.append("              COUNT\n");
         System.err.println(usage.toString());
     }

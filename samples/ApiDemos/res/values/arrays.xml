@@ -38,6 +38,14 @@
         <item>Pluto</item>
     </string-array>
 
+    <!-- Used in content/ClipboardSample.java -->
+    <string-array name="clip_data_types">
+        <item>No data in clipboard</item>
+        <item>Text clip</item>
+        <item>Intent clip</item>
+        <item>Uri clip</item>
+    </string-array>
+
     <!-- Used in App/SearchInvoke.java -->
     <string-array name="search_menuModes">
         <item>Search Key</item>
@@ -92,6 +100,7 @@
         <item>Numeric</item>
         <item>Alphabetic</item>
         <item>Alphanumeric</item>
+        <item>Complex</item>
     </string-array>
 
     <!-- Used in app/Screen Orientation -->
@@ -117,5 +126,24 @@
         <item>*bzzt*\nOpening portal to R\'lyeh.  Long live Cthulhu!</item>
         <item>*bzzt*\nYou\'re not very good at this, are you?</item>
         <item>*bzzt*\nGo away...</item>
+    </string-array>
+
+    <!-- Used in view/Split Touch View example -->
+    <string-array name="cheese_responses">
+        <item>I\'m afraid we\'re fresh out.</item>
+        <item>I\'m afraid we never have that at the end of the week, sir.  We get it fresh on Monday.</item>
+        <item>Ah. It\'s been on order, sir, for two weeks.  I was expecting it this morning.</item>
+        <item>Normally, sir, yes.  Today the van broke down.</item>
+        <item>No.</item>
+        <item>No.</item>
+        <item>No.</item>
+        <item>Yes, sir.  It\'s, ah ..... it\'s a bit runny.</item>
+        <item>Well, it\'s very runny, actually, sir.</item>
+        <item>I think it\'s a bit runnier than you\'ll like it, sir.</item>
+        <item>Oh... The cat\'s eaten it.</item>
+        <item>No.</item>
+        <item>No.</item>
+        <item>No.</item>
+        <item>Mmm... cheese.</item>
     </string-array>
 </resources>

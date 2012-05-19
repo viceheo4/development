@@ -16,12 +16,13 @@
 
 package com.example.android.apis.view;
 
+import com.example.android.apis.R;
+
 import android.app.TabActivity;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.TabHost;
 import android.widget.TextView;
-import android.view.View;
-import com.example.android.apis.R;
 
 /**
  * Example of using a tab content factory for the content via {@link TabHost.TabSpec#setContent(android.widget.TabHost.TabContentFactory)}

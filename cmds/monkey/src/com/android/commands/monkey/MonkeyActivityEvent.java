@@ -22,7 +22,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.RemoteException;
 import android.view.IWindowManager;
-import android.util.Log;
 
 /**
  * monkey activity event
@@ -57,7 +56,7 @@ public class MonkeyActivityEvent extends MonkeyEvent {
     public int injectEvent(IWindowManager iwm, IActivityManager iam, int verbose) {
         Intent intent = getEvent();
         if (verbose > 0) {
-            System.out.println(":Switch: " + intent.toURI());
+            System.out.println(":Switch: " + intent.toUri(0));
         }
 
         if (mAlarmTime != 0){
@@ -68,14 +67,14 @@ public class MonkeyActivityEvent extends MonkeyEvent {
 
         try {
             iam.startActivity(null, intent, null, null, 0, null, null, 0,
-                    false, false);
+                    false, false, null, null, false);
         } catch (RemoteException e) {
             System.err.println("** Failed talking with activity manager!");
             return MonkeyEvent.INJECT_ERROR_REMOTE_EXCEPTION;
         } catch (SecurityException e) {
             if (verbose > 0) {
                 System.out.println("** Permissions error starting activity "
-                        + intent.toURI());
+                        + intent.toUri(0));
             }
             return MonkeyEvent.INJECT_ERROR_SECURITY_EXCEPTION;
         }

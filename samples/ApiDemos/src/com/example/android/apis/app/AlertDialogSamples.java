@@ -80,6 +80,9 @@ public class AlertDialogSamples extends Activity {
     private static final int DIALOG_MULTIPLE_CHOICE = 6;
     private static final int DIALOG_TEXT_ENTRY = 7;
     private static final int DIALOG_MULTIPLE_CHOICE_CURSOR = 8;
+    private static final int DIALOG_YES_NO_ULTRA_LONG_MESSAGE = 9;
+    private static final int DIALOG_YES_NO_OLD_SCHOOL_MESSAGE = 10;
+    private static final int DIALOG_YES_NO_HOLO_LIGHT_MESSAGE = 11;
 
     private static final int MAX_PROGRESS = 100;
     
@@ -115,7 +118,7 @@ public class AlertDialogSamples extends Activity {
 
             }else{
             return new AlertDialog.Builder(AlertDialogSamples.this)
-                .setIcon(R.drawable.alert_dialog_icon)
+                .setIconAttribute(android.R.attr.alertDialogIcon)
                 .setTitle(R.string.alert_dialog_two_buttons_title)
                 .setPositiveButton(R.string.alert_dialog_ok, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int whichButton) {
@@ -130,16 +133,64 @@ public class AlertDialogSamples extends Activity {
                     }
                 })
                 .create();
+        case DIALOG_YES_NO_OLD_SCHOOL_MESSAGE:
+            return new AlertDialog.Builder(AlertDialogSamples.this, AlertDialog.THEME_TRADITIONAL)
+                .setIconAttribute(android.R.attr.alertDialogIcon)
+                .setTitle(R.string.alert_dialog_two_buttons_title)
+                .setPositiveButton(R.string.alert_dialog_ok, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int whichButton) {
             }
-        //Titie Msg YES Something NO 
+                })
+                .setNegativeButton(R.string.alert_dialog_cancel, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int whichButton) {
+                    }
+                })
+                .create();
+        case DIALOG_YES_NO_HOLO_LIGHT_MESSAGE:
+            return new AlertDialog.Builder(AlertDialogSamples.this, AlertDialog.THEME_HOLO_LIGHT)
+                .setIconAttribute(android.R.attr.alertDialogIcon)
+                .setTitle(R.string.alert_dialog_two_buttons_title)
+                .setPositiveButton(R.string.alert_dialog_ok, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int whichButton) {
+                    }
+                })
+                .setNegativeButton(R.string.alert_dialog_cancel, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int whichButton) {
+                    }
+                })
+                .create();
         case DIALOG_YES_NO_LONG_MESSAGE:
             return new AlertDialog.Builder(AlertDialogSamples.this)
-                .setIcon(R.drawable.alert_dialog_icon)
+                .setIconAttribute(android.R.attr.alertDialogIcon)
                 .setTitle(R.string.alert_dialog_two_buttons_msg)
                 .setMessage(R.string.alert_dialog_two_buttons2_msg)
                 .setPositiveButton(R.string.alert_dialog_ok, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int whichButton) {
     
+                        /* User clicked OK so do some stuff */
+                    }
+                })
+                .setNeutralButton(R.string.alert_dialog_something, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int whichButton) {
+
+                        /* User clicked Something so do some stuff */
+                    }
+                })
+                .setNegativeButton(R.string.alert_dialog_cancel, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int whichButton) {
+
+                        /* User clicked Cancel so do some stuff */
+                    }
+                })
+                .create();
+        case DIALOG_YES_NO_ULTRA_LONG_MESSAGE:
+            return new AlertDialog.Builder(AlertDialogSamples.this)
+                .setIconAttribute(android.R.attr.alertDialogIcon)
+                .setTitle(R.string.alert_dialog_two_buttons_msg)
+                .setMessage(R.string.alert_dialog_two_buttons2ultra_msg)
+                .setPositiveButton(R.string.alert_dialog_ok, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int whichButton) {
+
                         /* User clicked OK so do some stuff */
                     }
                 })
@@ -173,7 +224,7 @@ public class AlertDialogSamples extends Activity {
                 .create();
         case DIALOG_PROGRESS:
             mProgressDialog = new ProgressDialog(AlertDialogSamples.this);
-            mProgressDialog.setIcon(R.drawable.alert_dialog_icon);
+            mProgressDialog.setIconAttribute(android.R.attr.alertDialogIcon);
             mProgressDialog.setTitle(R.string.select_dialog);
             mProgressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
             mProgressDialog.setMax(MAX_PROGRESS);
@@ -195,7 +246,7 @@ public class AlertDialogSamples extends Activity {
         //Title List RadioSelect OK Cancel            
         case DIALOG_SINGLE_CHOICE:
             return new AlertDialog.Builder(AlertDialogSamples.this)
-                .setIcon(R.drawable.alert_dialog_icon)
+                .setIconAttribute(android.R.attr.alertDialogIcon)
                 .setTitle(R.string.alert_dialog_single_choice)
                 .setSingleChoiceItems(R.array.select_dialog_items2, 0, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int whichButton) {
@@ -280,7 +331,7 @@ public class AlertDialogSamples extends Activity {
             final View textEntryView = factory.inflate(R.layout.alert_dialog_text_entry, null);
             // comtomized ui를 가져오고, 나머지는 alert dialog를 그대로 이용.
             return new AlertDialog.Builder(AlertDialogSamples.this)
-                .setIcon(R.drawable.alert_dialog_icon)
+                .setIconAttribute(android.R.attr.alertDialogIcon)
 					// 가져온 view를 현재 dialog에 입히고
                 .setTitle(R.string.alert_dialog_text_entry)
                 .setView(textEntryView)// button추가 및 설정
@@ -329,6 +380,15 @@ public class AlertDialogSamples extends Activity {
         });
         
         
+        /* Display an ultra long text message with yes/no buttons and handle each message as well as the cancel action */
+        Button twoButtons2UltraTitle = (Button) findViewById(R.id.two_buttons2ultra);
+        twoButtons2UltraTitle.setOnClickListener(new OnClickListener() {
+            public void onClick(View v) {
+                showDialog(DIALOG_YES_NO_ULTRA_LONG_MESSAGE);
+            }
+        });
+
+
         /* Display a list of items */
         Button selectButton = (Button) findViewById(R.id.select_button);
         selectButton.setOnClickListener(new OnClickListener() {
@@ -383,6 +443,22 @@ public class AlertDialogSamples extends Activity {
         textEntry.setOnClickListener(new OnClickListener() {
             public void onClick(View v) {
                 showDialog(DIALOG_TEXT_ENTRY);
+            }
+        });
+        
+        /* Two points, in the traditional theme */
+        Button twoButtonsOldSchoolTitle = (Button) findViewById(R.id.two_buttons_old_school);
+        twoButtonsOldSchoolTitle.setOnClickListener(new OnClickListener() {
+            public void onClick(View v) {
+                showDialog(DIALOG_YES_NO_OLD_SCHOOL_MESSAGE);
+            }
+        });
+        
+        /* Two points, in the light holographic theme */
+        Button twoButtonsHoloLightTitle = (Button) findViewById(R.id.two_buttons_holo_light);
+        twoButtonsHoloLightTitle.setOnClickListener(new OnClickListener() {
+            public void onClick(View v) {
+                showDialog(DIALOG_YES_NO_HOLO_LIGHT_MESSAGE);
             }
         });
         
